@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import sys
+from dotenv import load_dotenv
 from os import getenv
 
 from aiogram import Bot, Dispatcher, Router
@@ -8,8 +9,12 @@ from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 from aiogram.filters import CommandStart
 from aiogram.types import (
-    Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery,
-)
+    Message, InlineKeyboardMarkup, InlineKeyboardButton, )
+
+from bot.login import router as login_router
+
+
+load_dotenv()
 
 TOKEN = getenv("BOT_TOKEN")
 
@@ -27,7 +32,7 @@ async def command_start(message: Message) -> None:
 async def main():
     bot = Bot(token=TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
     dp = Dispatcher()
-    dp.include_router(router)
+    dp.include_routers(router, login_router)
 
     await dp.start_polling(bot)
 
