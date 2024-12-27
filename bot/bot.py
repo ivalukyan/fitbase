@@ -8,7 +8,7 @@ from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 from aiogram.filters import CommandStart
 from aiogram.types import (
-    Message, InlineKeyboardMarkup, InlineKeyboardButton,
+    Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery,
 )
 
 TOKEN = getenv("BOT_TOKEN")
