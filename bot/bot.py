@@ -13,6 +13,8 @@ from aiogram.types import (
 
 from bot.login import router as login_router
 from bot.menu import router as menu_router
+from bot.normatives import router as normative_router
+from bot.top import router as top_router
 
 
 load_dotenv()
@@ -33,7 +35,7 @@ async def command_start(message: Message) -> None:
 async def main():
     bot = Bot(token=TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
     dp = Dispatcher()
-    dp.include_routers(router, login_router, menu_router)
+    dp.include_routers(router, login_router, menu_router, normative_router, top_router)
 
     await dp.start_polling(bot)
 
