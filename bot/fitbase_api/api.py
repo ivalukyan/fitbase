@@ -2,9 +2,15 @@
 @Description: API для запросов к CRM Fitbase
 """
 from typing import Any
+from os import getenv
+from dotenv import load_dotenv
 
 import httpx
 import ujson
+import asyncio
+
+
+load_dotenv()
 
 
 class FitbaseAPI:
@@ -248,3 +254,20 @@ class FitbaseAPI:
         if not res:
             return "Ошибка при удалении услуги клиента"
         return res
+
+
+async def main() -> None:
+
+    token = getenv("TOKEN")
+    domain = getenv("DOMAIN")
+
+    api = FitbaseAPI(fitbase_token=token, domain=domain)
+
+    contacts = await api.contacts_all()
+    for client in contacts['items']:
+        if client['contact_type'] == 'phone':
+            print(client['contact'])
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
