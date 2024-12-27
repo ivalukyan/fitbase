@@ -9,7 +9,7 @@ router = Router()
 
 @router.callback_query(F.data == "top")
 async def top(call: CallbackQuery):
-    await call.message.answer(text="Нормативы", reply_markup=InlineKeyboardMarkup(
+    await call.message.edit_text(text="Нормативы", reply_markup=InlineKeyboardMarkup(
         inline_keyboard=[
             [InlineKeyboardButton(text="Назад", callback_data="back_menu")]
         ]

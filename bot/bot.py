@@ -11,10 +11,10 @@ from aiogram.filters import CommandStart
 from aiogram.types import (
     Message, InlineKeyboardMarkup, InlineKeyboardButton, )
 
-from bot.login import router as login_router
-from bot.menu import router as menu_router
-from bot.normatives import router as normative_router
-from bot.top import router as top_router
+from login import router as login_router
+from menu import router as menu_router
+from normatives import router as normative_router
+from top import router as top_router
 
 
 load_dotenv()
