@@ -12,6 +12,7 @@ from aiogram.types import (
     Message, InlineKeyboardMarkup, InlineKeyboardButton, )
 
 from bot.login import router as login_router
+from bot.menu import router as menu_router
 
 
 load_dotenv()
@@ -32,7 +33,7 @@ async def command_start(message: Message) -> None:
 async def main():
     bot = Bot(token=TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
     dp = Dispatcher()
-    dp.include_routers(router, login_router)
+    dp.include_routers(router, login_router, menu_router)
 
     await dp.start_polling(bot)
 
