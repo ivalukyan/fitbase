@@ -7,7 +7,7 @@ from aiogram.types import (
 router = Router()
 
 
-@router.callback_query(F.data == "")
+@router.callback_query(F.data == "menu")
 async def menu(call: CallbackQuery) -> None:
     await call.message.answer("Главное меню",
                               reply_markup=InlineKeyboardMarkup(inline_keyboard=[
