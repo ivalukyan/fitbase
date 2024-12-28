@@ -3,9 +3,9 @@ from fastapi.params import Depends
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
-from bot.app.admin_app.auth.dependencies import get_db_session, authenticate_admin
-from bot.app.admin_app.schemas.auth_schemas import Token
-from bot.app.admin_app.auth.utils import create_access_token
+from admin_app.auth.dependencies import get_db_session, authenticate_admin
+from admin_app.schemas.auth_schemas import Token
+from admin_app.auth.utils import create_access_token
 
 router = APIRouter(
     tags=['Авторизация'],

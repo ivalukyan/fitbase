@@ -4,10 +4,10 @@ from starlette import status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 
-from bot.app.admin_app.auth.utils import SECRET_KEY, ALGORITHM
-from bot.database.models import SessionMaker, Admin
+from admin_app.auth.utils import SECRET_KEY, ALGORITHM
+from database.models import SessionMaker, Admin
 from sqlalchemy.orm import Session
-from bot.app.admin_app.schemas.auth_schemas import AdminSchemas
+from admin_app.schemas.auth_schemas import AdminSchemas
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")

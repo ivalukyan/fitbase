@@ -1,6 +1,6 @@
 from fastapi import FastAPI, APIRouter
-from bot.app.admin_app.routers.admin import router as admin_router
-from bot.app.admin_app.routers.auth import router as auth_router
+from admin_app.routers.admin import router as admin_router
+from admin_app.routers.auth import router as auth_router
 
 app = FastAPI()
 

@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta, UTC
+from datetime import datetime, timedelta, timezone
 from os import getenv
 from dotenv import load_dotenv
 
@@ -16,6 +16,8 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 async def create_access_token(data: dict, expires_delta: timedelta | None = None):
     to_encode = data.copy()
+
+    UTC = timezone.utc
 
     if expires_delta:
         expire = datetime.now(UTC) + expires_delta

@@ -3,8 +3,8 @@ from fastapi.params import Depends
 from sqlalchemy.orm import Session
 from uuid import UUID
 
-from bot.app.admin_app.auth.dependencies import get_current_admin, get_db_session
-from bot.app.admin_app.schemas.admin_schemas import AdminSchemas
+from admin_app.auth.dependencies import get_current_admin, get_db_session
+from admin_app.schemas.admin_schemas import AdminSchemas
 
 router = APIRouter(
     prefix="/admin",
