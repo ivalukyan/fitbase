@@ -23,7 +23,7 @@ class Admin(Base):
     id = Column(UUID, primary_key=True, default=uuid4)
     username = Column(String, nullable=False)
     phone = Column(String, nullable=False)
-    email = Column(String, nullable=False)
+    email = Column(String, nullable=True)
     password = Column(String, nullable=False)
 
 
@@ -32,7 +32,7 @@ class User(Base):
     id = Column(UUID, primary_key=True, default=uuid4)
     username = Column(String, nullable=False)
     phone = Column(String, nullable=False)
-    email = Column(String, nullable=False)
+    email = Column(String, nullable=True)
 
 
 if __name__ == '__main__':
