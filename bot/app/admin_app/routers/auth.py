@@ -13,10 +13,6 @@ router = APIRouter(
     prefix="/auth"
 )
 
-@router.get('/')
-async def auth():
-    return {"message": "it`s auth page"}
-
 
 @router.post("/token")
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(),
