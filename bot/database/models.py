@@ -9,7 +9,7 @@ from sqlalchemy.orm import sessionmaker, relationship
 
 #load_dotenv()
 
-db_url = ""
+db_url = "postgresql://postgres:postgres@localhost:5432/fitbase"
 
 engine = create_engine(db_url, pool_pre_ping=True, pool_recycle=300)
 
