@@ -7,7 +7,7 @@ from bot.app.admin_app.auth.dependencies import get_current_admin, get_db_sessio
 from bot.app.admin_app.schemas.admin_schemas import AdminSchemas
 
 router = APIRouter(
-    prefix="/api/admin",
+    prefix="/admin",
     tags=["Admin"],
 )
 
