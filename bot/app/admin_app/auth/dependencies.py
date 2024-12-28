@@ -5,8 +5,9 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 
 from bot.app.admin_app.auth.utils import SECRET_KEY, ALGORITHM
-from bot.database.models import SessionMaker
+from bot.database.models import SessionMaker, Admin
 from sqlalchemy.orm import Session
+from bot.app.admin_app.schemas.auth_schemas import AdminSchemas
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
@@ -45,7 +46,7 @@ async def get_current_admin(db_session: Session = Depends(get_db_session), token
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         phone: str = payload.get("sub")
-        print(phone)
+
         if phone is None:
             raise credentials_exception
     except JWTError:
@@ -55,7 +56,8 @@ async def get_current_admin(db_session: Session = Depends(get_db_session), token
 
     print(admin)
 
-    return AdminSchemas(id=admin.id, fullname=admin.fullname, phone=admin.phone, email=admin.email)
+    return AdminSchemas(id=admin.id, username=admin.username, password=admin.password,
+                        phone=admin.phone, email=admin.email)
 
 
 
