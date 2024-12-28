@@ -1,4 +1,4 @@
-from app.fitbase_api.api import FitbaseAPI
+from bot.app.admin_app.fitbase_api import FitbaseAPI
 from dotenv import load_dotenv
 from os import getenv
 
