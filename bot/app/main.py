@@ -15,6 +15,20 @@ api_router = APIRouter(
 
 templates = Jinja2Templates("admin_app/templates")
 
+
+# Обработчик для ошибки 404
+@app.exception_handler(401)
+async def custom_401_handler(request: Request, exc: HTTPException):
+    return templates.TemplateResponse(
+        "errors.html",
+        {
+            "request": request,
+            "status": 401,
+            "details": "Authentication credentials were not provided.",
+        },
+        status_code=401,
+    )
+
 # Обработчик для ошибки 404
 @app.exception_handler(404)
 async def custom_404_handler(request: Request, exc: HTTPException):
@@ -52,7 +66,7 @@ async def custom_400_handler(request: Request, exc: HTTPException):
         status_code=400,
     )
 
-# Подключение маршрутов
+
 api_router.include_router(auth_router)
 api_router.include_router(admin_router)
 

@@ -1,77 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Panel Dashboard</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f4f4f4;
-    }
-    .dashboard {
-      text-align: center;
-      padding: 20px;
-    }
-    canvas {
-      margin: 20px auto;
-      display: block;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Spotify Style</title>
+    <style>
+        :root {
+            --primary-color: #1DB954;
+            --background-color: #121212;
+            --sidebar-color: #181818;
+            --text-color: #FFFFFF;
+            --muted-text-color: #B3B3B3;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: var(--sidebar-color);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .sidebar h1 {
+            font-size: 24px;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .menu-item {
+            margin: 10px 0;
+            color: var(--muted-text-color);
+            text-decoration: none;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+        }
+
+        .menu-item:hover {
+            color: var(--text-color);
+        }
+
+        .menu-item .icon {
+            margin-right: 10px;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background-color: var(--sidebar-color);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            color: var(--muted-text-color);
+        }
+
+        .card .stats {
+            font-size: 24px;
+            color: var(--primary-color);
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
-  <div class="dashboard">
-    <h1>Админ Панель - Дашборд</h1>
-    <canvas id="pieChart" width="400" height="400"></canvas>
-  </div>
+    <div class="sidebar">
+        <h1>Admin Панель</h1>
+        <a href="#" class="menu-item"><span class="icon">👨‍💼</span> Пользователи</a>
+        <a href="#" class="menu-item"><span class="icon">📊</span> Нормативы</a>
+        <a href="#" class="menu-item"><span class="icon">🔙</span> Выйти</a>
+    </div>
 
-  <script>
-    // Данные для круговой диаграммы
-    const data = {
-      labels: ['Продукт A', 'Продукт B', 'Продукт C', 'Продукт D'],
-      datasets: [{
-        label: 'Распределение продуктов',
-        data: [44, 55, 13, 43], // Значения
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.6)',
-          'rgba(54, 162, 235, 0.6)',
-          'rgba(255, 206, 86, 0.6)',
-          'rgba(75, 192, 192, 0.6)'
-        ],
-        borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)'
-        ],
-        borderWidth: 1
-      }]
-    };
-
-    // Настройки диаграммы
-    const config = {
-      type: 'pie',
-      data: data,
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'top',
-          },
-          title: {
-            display: true,
-            text: 'Круговая диаграмма'
-          }
-        }
-      }
-    };
-
-    // Рендеринг диаграммы
-    const ctx = document.getElementById('pieChart').getContext('2d');
-    new Chart(ctx, config);
-  </script>
+    <div class="main-content">
+        <h1>Панель управления</h1>
+        <div class="dashboard">
+            <div class="card">
+                <h2>Пользователи</h2>
+                <p>Всего зарегистрированных пользователей</p>
+                <div class="stats">1,245</div>
+            </div>
+            <div class="card">
+                <h2>Абонементы</h2>
+                <p>Всего абонементов</p>
+                <div class="stats">12,300</div>
+            </div>
+            <div class="card">
+                <h2>Администраторы</h2>
+                <p>Всего администраторов</p>
+                <div class="stats">12</div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
