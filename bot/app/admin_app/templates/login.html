@@ -17,12 +17,14 @@
         <div>
             <div class="form-group">
                 <label for="username">Email or phone</label>
-                <input type="text" id="username" name="username" autocomplete="off" placeholder="Enter your phone or email" required>
+                <input type="text" id="username" name="username" autocomplete="off"
+                       placeholder="Enter your phone or email" required>
             </div>
 
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" autocomplete="off" placeholder="Enter your password" required minlength="6">
+                <input type="password" id="password" name="password" autocomplete="off"
+                       placeholder="Enter your password" required minlength="6">
             </div>
 
             <button type="submit" class="btn-login">Войти</button>
@@ -32,69 +34,70 @@
 </body>
 <script>
     const loginInput = document.getElementById('username');
-const passwordInput = document.getElementById('password');
+    const passwordInput = document.getElementById('password');
 
-const checkEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    const checkEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-const checkPhone = (phone) => /^\+7\d{10}$/.test(phone);
+    const checkPhone = (phone) => /^\+7\d{10}$/.test(phone);
 
-const isEmail = (input) => input.includes('@');
+    const isEmail = (input) => input.includes('@');
 
-const fetchAuth = async (username, password) => {
-    const payload = new URLSearchParams({
-        username,
-        password,
-    });
+    const fetchAuth = async (username, password) => {
+        const payload = new URLSearchParams({
+            username,
+            password,
+        });
 
-    const requestOptions = {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: payload,
+        const requestOptions = {
+            method: "POST",
+            headers: {"Content-Type": "application/x-www-form-urlencoded"},
+            body: payload,
+        };
+
+        try {
+            const response = await fetch("/api/auth/token", requestOptions);
+            if (response.ok) {
+                const data = await response.json();
+                localStorage.setItem("token", data.access_token); // Рассмотрите хранение токена более безопасно
+                window.location.href = "/api/admin/home"; // Перенаправление пользователя
+            } else if (response.status === 401) {
+                alert("Неверный логин или пароль.");
+            } else {
+                alert("Ошибка авторизации. Попробуйте позже.");
+            }
+        } catch (e) {
+            console.error("Ошибка при выполнении запроса: ", e);
+            alert("Произошла ошибка. Проверьте подключение к сети.");
+        }
     };
 
-    try {
-        const response = await fetch("/api/auth/token", requestOptions);
-        if (response.ok) {
-            const data = await response.json();
-            localStorage.setItem("token", data.access_token); // Рассмотрите хранение токена более безопасно
-            window.location.href = "/api/admin/home"; // Перенаправление пользователя
-        } else if (response.status === 401) {
-            alert("Неверный логин или пароль.");
-        } else {
-            alert("Ошибка авторизации. Попробуйте позже.");
+    const handleLogin = async (event) => {
+        event.preventDefault();
+
+        const login = loginInput.value.trim();
+        const password = passwordInput.value;
+
+        console.log(login);
+        console.log(password);
+
+        if (!login || !password) {
+            alert("Пожалуйста, заполните все поля.");
+            return;
         }
-    } catch (e) {
-        console.error("Ошибка при выполнении запроса: ", e);
-        alert("Произошла ошибка. Проверьте подключение к сети.");
-    }
-};
 
-const handleLogin = async (event) => {
-    event.preventDefault();
-
-    console.log(loginInput);
-
-    const login = loginInput.value.trim();
-    const password = passwordInput.value;
-
-    if (!login || !password) {
-        alert("Пожалуйста, заполните все поля.");
-        return;
-    }
-
-    if (isEmail(login)) {
-        if (checkEmail(login)) {
-            await fetchAuth(login, password);
+        if (isEmail(login)) {
+            if (checkEmail(login)) {
+                await fetchAuth(login, password);
+            } else {
+                alert("E-mail введен некорректно!");
+            }
         } else {
-            alert("E-mail введен некорректно!");
+            if (checkPhone(login)) {
+                await fetchAuth(login, password);
+            } else {
+                alert("Номер телефона введен некорректно! Номер должен выглядеть: +7XXXXXXXXXX");
+            }
         }
-    } else {
-        if (checkPhone(login)) {
-            await fetchAuth(login, password);
-        } else {
-            alert("Номер телефона введен некорректно! Номер должен выглядеть: +7XXXXXXXXXX");
-        }
-    }
-};
+    };
 </script>
 </html>

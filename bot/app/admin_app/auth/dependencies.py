@@ -24,24 +24,15 @@ def get_db_session():
         db.close()
 
 
-async def get_admin_phone(db_session: Session, phone: str):
+async def get_admin(db_session: Session, phone: str):
     return db_session.query(Admin).filter(Admin.phone == phone).first()
-
-async def get_admin_email(db_session: Session, email: str):
-    return db_session.query(Admin).filter(Admin.email == email).first()
 
 
 async def authenticate_admin(db_session: Session, username: str):
-    admin_phone = await get_admin_phone(db_session, username)
-    admin_email = await get_admin_email(db_session, username)
-    if not admin_phone or not admin_email:
+    admin = await get_admin(db_session, username)
+    if not admin:
         return None
-
-    if not admin_phone:
-        return admin_email
-
-    if not admin_email:
-        return admin_phone
+    return admin
 
 
 async def get_current_admin(db_session: Session = Depends(get_db_session), token: str = Depends(oauth2_scheme)):
@@ -60,7 +51,7 @@ async def get_current_admin(db_session: Session = Depends(get_db_session), token
     except JWTError:
         raise credentials_exception
 
-    admin = await get_admin_phone(db_session, phone)
+    admin = await get_admin(db_session, phone)
 
     return AdminSchemas(id=admin.id, username=admin.username, password=admin.password,
                         phone=admin.phone, email=admin.email)
