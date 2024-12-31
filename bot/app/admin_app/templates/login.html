@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <script src="/"></script>
+    <script src="{{ url_for('static', path='/scripts/login.js') }}"></script>
     <link href="{{ url_for('static', path='/css/login.css') }}" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
@@ -15,10 +15,10 @@
         <h1 class="logo">Fitbase</h1>
         <h2>Войдите в свой аккаунт</h2>
 
-        <form>
+        <form method="post">
             <div class="form-group">
                 <label for="username">Email or phone</label>
-                <input type="email" id="username" name="username" autocomplete="off" placeholder="Enter your phone or email" required>
+                <input type="text" id="username" name="username" autocomplete="off" placeholder="Enter your phone or email" required>
             </div>
 
             <div class="form-group">
@@ -26,7 +26,7 @@
                 <input type="password" id="password" name="password" autocomplete="off" placeholder="Enter your password" required>
             </div>
 
-            <button type="submit" class="btn-login">Войти</button>
+            <button type="submit" id="btn-login" class="btn-login">Войти</button>
         </form>
     </div>
 </div>
