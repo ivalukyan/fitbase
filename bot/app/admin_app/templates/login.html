@@ -60,8 +60,6 @@
                 const data = await response.json();
                 localStorage.setItem("token", data.access_token); // Рассмотрите хранение токена более безопасно
                 window.location.href = "/api/admin/home"; // Перенаправление пользователя
-            } else if (response.status === 401) {
-                alert("Неверный логин или пароль.");
             } else {
                 alert("Ошибка авторизации. Попробуйте позже.");
             }
