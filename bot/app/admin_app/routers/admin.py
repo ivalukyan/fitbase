@@ -1,6 +1,5 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Request, Depends
 from fastapi.templating import Jinja2Templates
-from fastapi.params import Depends
 from sqlalchemy.orm import Session
 from uuid import UUID
 
@@ -12,12 +11,12 @@ router = APIRouter(
     tags=["Admin"],
 )
 
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory="admin_app/templates")
 
 
 @router.get("/login", description="Авторизация администратора")
-async def login_admin(db: Session = Depends(get_db_session)):
-    return
+async def login_admin(request: Request, db: Session = Depends(get_db_session)):
+    return templates.TemplateResponse("login.html", {"request": request, "db": db})
 
 
 @router.get("/me", response_model=AdminSchemas, description="Профиль администратора")
