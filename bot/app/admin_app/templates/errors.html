@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error Page</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: #121212;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 600px;
+        }
+
+        h1 {
+            font-size: 6rem;
+            color: #1db954;
+            margin: 0;
+        }
+
+        p {
+            font-size: 1.2rem;
+            color: #b3b3b3;
+            margin: 10px 0;
+        }
+
+        .btn {
+            background-color: #1db954;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #14843c;
+        }
+
+        .spotify-icon {
+            width: 100px;
+            margin: 20px auto;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 4rem;
+            }
+
+            p {
+                font-size: 1rem;
+            }
+
+            .btn {
+                font-size: 0.9rem;
+            }
+
+            .spotify-icon {
+                width: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg" alt="Spotify Logo" class="spotify-icon">
+        <h1 id="error-code">Error Code</h1>
+        <p id="error-message">Oops! Something went wrong.</p>
+        <a href="/bot/app/admin_app/static" class="btn">Go Back Home</a>
+    </div>
+
+    <script>
+        const errorCode = "{{ status }}";
+        const errorMessage = "{{ details }}";
+
+        document.getElementById('error-code').textContent = errorCode;
+        document.getElementById('error-message').textContent = errorMessage;
+    </script>
+</body>
+</html>

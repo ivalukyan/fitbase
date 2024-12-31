@@ -1,10 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    .dashboard {
+      text-align: center;
+      padding: 20px;
+    }
+    canvas {
+      margin: 20px auto;
+      display: block;
+    }
+  </style>
 </head>
 <body>
+  <div class="dashboard">
+    <h1>Админ Панель - Дашборд</h1>
+    <canvas id="pieChart" width="400" height="400"></canvas>
+  </div>
 
+  <script>
+    // Данные для круговой диаграммы
+    const data = {
+      labels: ['Продукт A', 'Продукт B', 'Продукт C', 'Продукт D'],
+      datasets: [{
+        label: 'Распределение продуктов',
+        data: [44, 55, 13, 43], // Значения
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(75, 192, 192, 0.6)'
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)'
+        ],
+        borderWidth: 1
+      }]
+    };
+
+    // Настройки диаграммы
+    const config = {
+      type: 'pie',
+      data: data,
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: true,
+            text: 'Круговая диаграмма'
+          }
+        }
+      }
+    };
+
+    // Рендеринг диаграммы
+    const ctx = document.getElementById('pieChart').getContext('2d');
+    new Chart(ctx, config);
+  </script>
 </body>
 </html>
