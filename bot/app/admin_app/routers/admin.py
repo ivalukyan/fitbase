@@ -16,7 +16,12 @@ templates = Jinja2Templates(directory="admin_app/templates")
 
 @router.get("/login", description="Авторизация администратора")
 async def login_admin(request: Request, db: Session = Depends(get_db_session)):
-    return templates.TemplateResponse("login.html", {"request": request, "db": db})
+    return templates.TemplateResponse("login.html", {"request": request})
+
+
+@router.get("/home", description="Главная страница")
+async def home(request: Request, db: Session = Depends(get_db_session)):
+    return templates.TemplateResponse("home.html", {"request": request})
 
 
 @router.get("/me", response_model=AdminSchemas, description="Профиль администратора")

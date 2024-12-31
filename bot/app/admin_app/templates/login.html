@@ -15,7 +15,7 @@
         <h1 class="logo">Fitbase</h1>
         <h2>Войдите в свой аккаунт</h2>
 
-        <form method="post">
+        <form onsubmit="handleLogin()">
             <div class="form-group">
                 <label for="username">Email or phone</label>
                 <input type="text" id="username" name="username" autocomplete="off" placeholder="Enter your phone or email" required>
@@ -26,7 +26,7 @@
                 <input type="password" id="password" name="password" autocomplete="off" placeholder="Enter your password" required>
             </div>
 
-            <button type="submit" id="btn-login" class="btn-login">Войти</button>
+            <button type="submit" class="btn-login">Войти</button>
         </form>
     </div>
 </div>
