@@ -29,6 +29,11 @@ async def get_admin_me(admin: AdminSchemas = Depends(get_current_admin)):
     return admin
 
 
+@router.get("/users")
+async def get_admin_users(request: Request):
+    return templates.TemplateResponse("users.html", {"request": request})
+
+
 @router.get("/normative", description="Получение результатов пользователей")
 async def all_results(db: Session = Depends(get_db_session)):
     return {"msg": "Получение результатов"}

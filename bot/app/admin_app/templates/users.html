@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пользователи</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            margin: 20px;
+        }
+
+        h1 {
+            color: #1DB954;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background-color: #181818;
+            color: #ffffff;
+        }
+
+        table, th, td {
+            border: 1px solid #282828;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #282828;
+        }
+
+        button {
+            padding: 5px 10px;
+            margin: 0 2px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .edit {
+            background-color: #1DB954;
+            color: white;
+            width: 45%;
+            padding: 10px;
+        }
+
+        .delete {
+            background-color: #e91429;
+            color: white;
+            width: 45%;
+            padding: 10px;
+        }
+
+        .add {
+            background-color: #1DB954;
+            color: white;
+            padding: 10px 20px;
+            margin: 0 0 20px 0;
+        }
+
+        #addUserForm {
+            background-color: #181818;
+            padding: 20px;
+            border: 1px solid #282828;
+            border-radius: 8px;
+        }
+
+        input {
+            background-color: #121212;
+            border: 1px solid #282828;
+            color: #ffffff;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 4px;
+            width: calc(100% - 16px);
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #1DB954;
+        }
+    </style>
+</head>
+<body>
+<h1>Пользователи</h1>
+<button class="add" onclick="showAddUserForm()">Add User</button>
+<table id="userTable">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Имя</th>
+        <th>Телефон</th>
+        <th>Email</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Rows will be dynamically added here -->
+    </tbody>
+</table>
+
+<!-- Add User Form -->
+<div id="addUserForm" style="display: none;">
+    <h2>Добавление пользователя</h2>
+    <label for="name">Имя:</label>
+    <input type="text" id="name" name="name">
+    <br><br>
+    <label for="phone">Телефон:</label>
+    <input type="email" id="phone" name="email">
+    <br><br>
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email">
+    <br><br>
+    <button class="add" onclick="addUser()">Подтвердить</button>
+    <button onclick="hideAddUserForm()" style="background-color: #282828; color: #ffffff;">Отмена</button>
+</div>
+
+<script>
+    // Example data - Replace this with API calls
+    let users = [
+        {id: 1, name: 'John Doe', email: 'john.doe@example.com'},
+        {id: 2, name: 'Jane Smith', email: 'jane.smith@example.com'}
+    ];
+
+    function loadUsers() {
+        const tableBody = document.getElementById('userTable').querySelector('tbody');
+        tableBody.innerHTML = '';
+        users.forEach(user => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                    <td>${user.id}</td>
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td>
+                        <button class="edit" onclick="editUser(${user.id})">Edit</button>
+                        <button class="delete" onclick="deleteUser(${user.id})">Delete</button>
+                    </td>
+                `;
+            tableBody.appendChild(row);
+        });
+    }
+
+    function showAddUserForm() {
+        document.getElementById('addUserForm').style.display = 'block';
+    }
+
+    function hideAddUserForm() {
+        document.getElementById('addUserForm').style.display = 'none';
+    }
+
+    function addUser() {
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        if (name && email) {
+            const newUser = {
+                id: users.length ? users[users.length - 1].id + 1 : 1,
+                name,
+                email
+            };
+            users.push(newUser);
+            loadUsers();
+            hideAddUserForm();
+        } else {
+            alert('Please fill in all fields');
+        }
+    }
+
+    function editUser(id) {
+        const user = users.find(u => u.id === id);
+        if (user) {
+            const name = prompt('Enter new name:', user.name);
+            const email = prompt('Enter new email:', user.email);
+            if (name && email) {
+                user.name = name;
+                user.email = email;
+                loadUsers();
+            }
+        }
+    }
+
+    function deleteUser(id) {
+        users = users.filter(user => user.id !== id);
+        loadUsers();
+    }
+
+    // Initial load
+    loadUsers();
+</script>
+</body>
+</html>
