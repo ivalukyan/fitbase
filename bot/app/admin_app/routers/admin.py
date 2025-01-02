@@ -30,7 +30,7 @@ async def get_admin_me(admin: AdminSchemas = Depends(get_current_admin)):
 
 
 @router.get("/users")
-async def get_admin_users(request: Request):
+async def get_admin_users(request: Request, db: Session = Depends(get_db_session)):
     return templates.TemplateResponse("users.html", {"request": request})
 
 
