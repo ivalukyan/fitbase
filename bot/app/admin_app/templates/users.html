@@ -66,11 +66,12 @@
             margin: 0 0 20px 0;
         }
 
-        #addUserForm {
+        #addUserForm, #updateUserForm {
             background-color: #181818;
             padding: 20px;
             border: 1px solid #282828;
             border-radius: 8px;
+            margin: 0 0 25px 0;
         }
 
         input {
@@ -87,11 +88,44 @@
             outline: none;
             border-color: #1DB954;
         }
+
+        #searchBox {
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
 <h1>Пользователи</h1>
-<button class="add" onclick="showAddUserForm()">Add User</button>
+<input type="text" id="searchBox" placeholder="Поиск по имени или телефону" oninput="filterUsers()">
+<button class="add" onclick="showAddUserForm()">Добавить пользователя</button>
+<div id="addUserForm" style="display: none;">
+    <h2>Добавление пользователя</h2>
+    <label for="name">Имя:</label>
+    <input type="text" id="addName" name="name">
+    <br><br>
+    <label for="phone">Телефон:</label>
+    <input type="text" id="addPhone" name="phone">
+    <br><br>
+    <label for="email">Email:</label>
+    <input type="email" id="addEmail" name="email">
+    <br><br>
+    <button class="add" onclick="addUser()">Подтвердить</button>
+    <button onclick="hideAddUserForm()" style="background-color: #282828; color: #ffffff; padding: 11px">Отмена</button>
+</div>
+<div id="updateUserForm" style="display: none;">
+    <h2>Изменение пользователя</h2>
+    <label for="name">Имя:</label>
+    <input type="text" id="updateName" name="name">
+    <br><br>
+    <label for="phone">Телефон:</label>
+    <input type="text" id="updatePhone" name="phone">
+    <br><br>
+    <label for="email">Email:</label>
+    <input type="email" id="updateEmail" name="email">
+    <br><br>
+    <button class="add" onclick="updateUser()">Подтвердить</button>
+    <button onclick="hideUpdateUserForm()" style="background-color: #282828; color: #ffffff; padding: 11px">Отмена</button>
+</div>
 <table id="userTable">
     <thead>
     <tr>
@@ -103,49 +137,40 @@
     </tr>
     </thead>
     <tbody>
-    <!-- Rows will be dynamically added here -->
     </tbody>
 </table>
-
-<!-- Add User Form -->
-<div id="addUserForm" style="display: none;">
-    <h2>Добавление пользователя</h2>
-    <label for="name">Имя:</label>
-    <input type="text" id="name" name="name">
-    <br><br>
-    <label for="phone">Телефон:</label>
-    <input type="email" id="phone" name="email">
-    <br><br>
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email">
-    <br><br>
-    <button class="add" onclick="addUser()">Подтвердить</button>
-    <button onclick="hideAddUserForm()" style="background-color: #282828; color: #ffffff;">Отмена</button>
-</div>
-
 <script>
-    // Example data - Replace this with API calls
     let users = [
-        {id: 1, name: 'John Doe', email: 'john.doe@example.com'},
-        {id: 2, name: 'Jane Smith', email: 'jane.smith@example.com'}
+        {id: 1, name: 'John Doe', phone: '+79664563432', email: 'john.doe@example.com'},
+        {id: 2, name: 'Jane Smith', phone: '+79453452233', email: 'jane.smith@example.com'}
     ];
+    let currentEditId = null;
 
-    function loadUsers() {
+    function loadUsers(filteredUsers = users) {
         const tableBody = document.getElementById('userTable').querySelector('tbody');
         tableBody.innerHTML = '';
-        users.forEach(user => {
+        filteredUsers.forEach(user => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                    <td>${user.id}</td>
-                    <td>${user.name}</td>
-                    <td>${user.email}</td>
-                    <td>
-                        <button class="edit" onclick="editUser(${user.id})">Edit</button>
-                        <button class="delete" onclick="deleteUser(${user.id})">Delete</button>
-                    </td>
-                `;
+                <td>${user.id}</td>
+                <td>${user.name}</td>
+                <td>${user.phone}</td>
+                <td>${user.email}</td>
+                <td>
+                    <button class="edit" onclick="showUpdateUserForm(${user.id})">Изменить</button>
+                    <button class="delete" onclick="deleteUser(${user.id})">Удалить</button>
+                </td>
+            `;
             tableBody.appendChild(row);
         });
+    }
+
+    function filterUsers() {
+        const query = document.getElementById('searchBox').value.toLowerCase();
+        const filteredUsers = users.filter(user =>
+            user.name.toLowerCase().includes(query) || user.phone.toLowerCase().includes(query)
+        );
+        loadUsers(filteredUsers);
     }
 
     function showAddUserForm() {
@@ -157,32 +182,55 @@
     }
 
     function addUser() {
-        const name = document.getElementById('name').value;
-        const email = document.getElementById('email').value;
-        if (name && email) {
+        const name = document.getElementById('addName').value;
+        const phone = document.getElementById('addPhone').value;
+        const email = document.getElementById('addEmail').value;
+
+        if (name && phone && email) {
             const newUser = {
                 id: users.length ? users[users.length - 1].id + 1 : 1,
                 name,
+                phone,
                 email
             };
             users.push(newUser);
             loadUsers();
             hideAddUserForm();
         } else {
-            alert('Please fill in all fields');
+            alert('Пожалуйста, заполните все поля');
         }
     }
 
-    function editUser(id) {
+    function showUpdateUserForm(id) {
         const user = users.find(u => u.id === id);
         if (user) {
-            const name = prompt('Enter new name:', user.name);
-            const email = prompt('Enter new email:', user.email);
-            if (name && email) {
-                user.name = name;
-                user.email = email;
+            currentEditId = id;
+            document.getElementById('updateName').value = user.name;
+            document.getElementById('updatePhone').value = user.phone;
+            document.getElementById('updateEmail').value = user.email;
+            document.getElementById('updateUserForm').style.display = 'block';
+        }
+    }
+
+    function hideUpdateUserForm() {
+        document.getElementById('updateUserForm').style.display = 'none';
+    }
+
+    function updateUser() {
+        const name = document.getElementById('updateName').value;
+        const phone = document.getElementById('updatePhone').value;
+        const email = document.getElementById('updateEmail').value;
+
+        if (currentEditId && name && phone && email) {
+            const userIndex = users.findIndex(u => u.id === currentEditId);
+            if (userIndex > -1) {
+                users[userIndex] = {id: currentEditId, name, phone, email};
                 loadUsers();
+                hideUpdateUserForm();
+                currentEditId = null;
             }
+        } else {
+            alert('Пожалуйста, заполните все поля');
         }
     }
 
