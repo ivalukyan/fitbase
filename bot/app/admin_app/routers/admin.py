@@ -35,8 +35,8 @@ async def get_admin_users(request: Request):
 
 
 @router.get("/normative", description="Получение результатов пользователей")
-async def all_results(db: Session = Depends(get_db_session)):
-    return {"msg": "Получение результатов"}
+async def all_results(request: Request, db: Session = Depends(get_db_session)):
+    return templates.TemplateResponse("normative.html", {"request": request})
 
 
 @router.post("/normative", description="Добавление результат норматива пользователя")
