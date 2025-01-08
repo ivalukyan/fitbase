@@ -8,7 +8,6 @@ from aiogram.types import (
 from menu import menu
 from utils import get_all_contacts
 
-
 router = Router()
 
 
@@ -18,8 +17,8 @@ async def login(call: CallbackQuery) -> None:
                               reply_markup=ReplyKeyboardMarkup(keyboard=[
                                   [KeyboardButton(text="Поделится номером", request_contact=True)]
                               ],
-                              resize_keyboard=True,
-                              one_time_keyboard=True))
+                                  resize_keyboard=True,
+                                  one_time_keyboard=True))
 
 
 @router.message(F.contact)

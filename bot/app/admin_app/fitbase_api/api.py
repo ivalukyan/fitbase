@@ -263,10 +263,19 @@ async def main() -> None:
 
     api = FitbaseAPI(fitbase_token=token, domain=domain)
 
-    contacts = await api.contacts_all()
-    for client in contacts['items']:
-        if client['contact_type'] == 'phone':
-            print(client['contact'])
+    # services = await api.client_service_all()
+    # for service in services['items']:
+    #     if service['service']['available_service']['archive'] is False:
+    #         print(service['service']['available_service'])
+
+    # contacts = await api.contacts_all()
+    # for client in contacts['items']:
+    #     if client['contact_type'] == 'phone':
+    #         print(client['contact'])
+
+    clients = await api.clients_all()
+    for client in clients['items']:
+        print(client)
 
 
 if __name__ == "__main__":
