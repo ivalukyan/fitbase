@@ -3,6 +3,7 @@ import logging
 import sys
 from dotenv import load_dotenv
 from os import getenv
+from menu import MESSAGES
 
 from aiogram import Bot, Dispatcher, Router
 from aiogram.client.default import DefaultBotProperties
@@ -30,6 +31,7 @@ async def command_start(message: Message) -> None:
                          reply_markup=InlineKeyboardMarkup(inline_keyboard=[[
                              InlineKeyboardButton(text="Войти", callback_data="login")
                          ]]))
+    MESSAGES.append(message.message_id)
 
 
 async def main():

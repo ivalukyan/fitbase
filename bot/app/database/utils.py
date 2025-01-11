@@ -70,3 +70,7 @@ async def delete_standard(telegram_id: int):
 
 async def get_standard_by_id(telegram_id: int):
     return db.query(Standards).filter(Standards.telegram_id == telegram_id).first()
+
+
+async def get_top_by_name(name: str):
+    return db.query(getattr(Standards, name)).all()

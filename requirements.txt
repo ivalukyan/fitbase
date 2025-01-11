@@ -13,3 +13,6 @@ psycopg2-binary~=2.9.10
 datetime~=5.5
 python-multipart~=0.0.20
 alembic~=1.14.0
+numpy~=2.2.1
+matplotlib~=3.10.0
+scikit-learn~=1.6.1
