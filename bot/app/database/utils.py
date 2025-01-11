@@ -4,6 +4,8 @@ Utils DB
 from app.database.models import SessionMaker
 from app.database.models import User, Standards
 
+from bot.app.database.models import Admin
+
 db = SessionMaker()
 
 
@@ -74,3 +76,7 @@ async def get_standard_by_id(telegram_id: int):
 
 async def get_top_by_name(name: str):
     return db.query(getattr(Standards, name)).all()
+
+
+async def get_admin_by_telegram_id(telegram_id: int):
+    return db.query(Admin).filter(Admin.telegram_id == telegram_id).first()

@@ -16,6 +16,7 @@ from login import router as login_router
 from menu import router as menu_router
 from normatives import router as normatives_router
 from top import router as top_router
+from admin import router as admin_router
 
 
 load_dotenv()
@@ -37,7 +38,7 @@ async def command_start(message: Message) -> None:
 async def main():
     bot = Bot(token=TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
     dp = Dispatcher()
-    dp.include_routers(router, login_router, menu_router, normatives_router, top_router)
+    dp.include_routers(router, login_router, menu_router, normatives_router, top_router, admin_router)
 
     await dp.start_polling(bot)
 

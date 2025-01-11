@@ -25,6 +25,7 @@ class Admin(Base):
     phone = Column(String, nullable=False)
     email = Column(String, nullable=True)
     password = Column(String, nullable=False)
+    telegram_id = Column(BigInteger, nullable=False)
 
 
 class User(Base):
