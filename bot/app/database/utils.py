@@ -1,13 +1,13 @@
 """
 Utils DB
 """
-from models import SessionMaker
-from models import User, Standards
+from app.database.models import SessionMaker
+from app.database.models import User, Standards
 
 db = SessionMaker()
 
 
-async def add_user(username: str, phone: str, email: str, telegram_id: int):
+async def add_user(username: str, phone: str, telegram_id: int, email: str | None = None):
     user = User(username=username, phone=phone, email=email, telegram_id=telegram_id)
     db.add(user)
     db.commit()
@@ -16,6 +16,13 @@ async def add_user(username: str, phone: str, email: str, telegram_id: int):
 async def update_user(telegram_id: int, username: str, phone: str, email: str):
     db.query(User).filter(User.telegram_id == telegram_id).update({'username': username, 'phone': phone, 'email': email})
     db.commit()
+
+
+async def get_user_by_telegram_id(telegram_id: int) -> bool:
+    user = db.query(User).filter(User.telegram_id == telegram_id).first()
+    if not user:
+        return False
+    return True
 
 
 async def add_standard(telegram_id: int):
