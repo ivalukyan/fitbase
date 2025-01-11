@@ -2,9 +2,7 @@
 Utils DB
 """
 from app.database.models import SessionMaker
-from app.database.models import User, Standards
-
-from bot.app.database.models import Admin
+from app.database.models import User, Standards, Admin
 
 db = SessionMaker()
 
