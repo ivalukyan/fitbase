@@ -9,7 +9,7 @@ from aiogram.types import (
 from menu import MESSAGES
 from menu import menu
 from utils import get_all_contacts
-from app.database.utils import get_user_by_telegram_id, add_user, add_standard
+from utils import get_user_by_telegram_id, add_user, add_standard
 
 router = Router()
 

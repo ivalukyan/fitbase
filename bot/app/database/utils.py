@@ -22,13 +22,6 @@ async def update_user(telegram_id: int, username: str, phone: str, email: str):
     db.commit()
 
 
-async def get_user_by_telegram_id(telegram_id: int) -> bool:
-    user = db.query(User).filter(User.telegram_id == telegram_id).first()
-    if not user:
-        return False
-    return True
-
-
 async def get_all_users() -> list:
     users = db.query(User).all()
     
@@ -94,10 +87,6 @@ async def get_standard_by_id(telegram_id: int):
 
 async def get_top_by_name(name: str):
     return db.query(getattr(Standards, name)).all()
-
-
-async def get_admin_by_telegram_id(telegram_id: int):
-    return db.query(Admin).filter(Admin.telegram_id == telegram_id).first()
 
 
 async def get_all_admins():

@@ -3,7 +3,7 @@ from aiogram.filters import Command
 from aiogram.types import (
     InlineKeyboardMarkup, InlineKeyboardButton, Message
 )
-from app.database.utils import get_admin_by_telegram_id
+from utils import get_admin_by_telegram_id
 
 
 router = Router()
@@ -21,5 +21,5 @@ async def admin_endpoint(message: Message):
         """
 
         await message.answer(text=text, parse_mode="html", reply_markup=InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="Сайт", url="https://ya.ru/")]
+            [InlineKeyboardButton(text="Сайт", url="http://127.0.0.1:8000/api/admin/login")]
         ]))

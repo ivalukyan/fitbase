@@ -1,3 +1,7 @@
+import sys
+
+import uvicorn
+import logging
 from fastapi import FastAPI, APIRouter, Request, HTTPException
 from fastapi.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
@@ -70,3 +74,8 @@ api_router.include_router(auth_router)
 api_router.include_router(admin_router)
 
 app.include_router(api_router)
+
+
+if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+    uvicorn.run(app)

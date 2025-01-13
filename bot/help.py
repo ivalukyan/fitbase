@@ -3,7 +3,7 @@ from aiogram.filters import Command
 from aiogram.types import (
     InlineKeyboardMarkup, InlineKeyboardButton, Message
 )
-from app.database.utils import get_user_by_telegram_id
+from utils import get_user_by_telegram_id
 
 router = Router()
 
@@ -11,7 +11,7 @@ router = Router()
 @router.message(Command("help"))
 async def admin_endpoint(message: Message):
 
-    if get_user_by_telegram_id(message.from_user.id):
+    if await get_user_by_telegram_id(message.from_user.id):
         text = """
         <b>ДОСТУПНЫЕ КОМАНДЫ</b>
         
