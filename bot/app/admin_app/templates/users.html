@@ -5,27 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Пользователи</title>
     <style>
+        :root {
+            --primary-color: #ffc266;
+            --hover-primary: #c59855;
+            --dark-bg: #121212;
+            --dark-gray: #181818;
+            --border-color: #282828;
+            --button-padding: 10px 20px;
+            --input-padding: 8px;
+        }
+
         body {
             font-family: 'Helvetica Neue', Arial, sans-serif;
-            background-color: #121212;
+            background-color: var(--dark-bg);
             color: #ffffff;
             margin: 20px;
         }
 
         h1 {
-            color: #1DB954;
+            color: var(--primary-color);
+            font-size: 24px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
-            background-color: #181818;
+            background-color: var(--dark-gray);
             color: #ffffff;
         }
 
         table, th, td {
-            border: 1px solid #282828;
+            border: 1px solid var(--border-color);
         }
 
         th, td {
@@ -34,11 +45,16 @@
         }
 
         th {
-            background-color: #282828;
+            background-color: var(--border-color);
+            font-size: 16px;
+        }
+
+        table tr:hover {
+            background-color: #333333;
         }
 
         button {
-            padding: 5px 10px;
+            padding: var(--button-padding);
             margin: 0 2px;
             border: none;
             border-radius: 4px;
@@ -48,37 +64,50 @@
         .edit {
             background-color: #1DB954;
             color: white;
-            width: 45%;
-            padding: 10px;
+            width: 100%;
         }
 
         .delete {
             background-color: #e91429;
             color: white;
-            width: 45%;
-            padding: 10px;
+            width: 100%;
         }
 
         .add {
-            background-color: #1DB954;
-            color: white;
-            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: #000;
+            font-size: 16px;
+            font-weight: 600;
+            padding: var(--button-padding);
             margin: 0 0 20px 0;
         }
 
         #addUserForm, #updateUserForm {
-            background-color: #181818;
+            background-color: var(--dark-gray);
             padding: 20px;
-            border: 1px solid #282828;
+            border: 1px solid var(--border-color);
             border-radius: 8px;
             margin: 0 0 25px 0;
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         input {
-            background-color: #121212;
-            border: 1px solid #282828;
+            background-color: var(--dark-bg);
+            border: 1px solid var(--border-color);
             color: #ffffff;
-            padding: 8px;
+            padding: var(--input-padding);
             margin: 5px 0;
             border-radius: 4px;
             width: calc(100% - 16px);
@@ -86,79 +115,200 @@
 
         input:focus {
             outline: none;
-            border-color: #1DB954;
+            border-color: var(--primary-color);
         }
 
         #searchBox {
             margin: 0 0 20px 0;
             padding: 11px;
+            border: 1px solid var(--border-color);
         }
 
-        #searchBox:hover{
-            border: solid 1px #1db954;
+        #searchBox:hover {
+            border-color: var(--primary-color);
         }
 
         a {
             text-decoration: none;
-            color: #1db954;
+            color: var(--primary-color);
         }
 
         a:hover {
-           color: #14843c;
+            color: var(--hover-primary);
         }
+
+        /* Notification styles */
+        #notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 300px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            font-size: 14px;
+            color: #ffffff;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .notification.is-info {
+            background-color: #209cee;
+            border: 1px solid #1c7bc9;
+        }
+
+        .notification .delete {
+            background: none;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            color: #ffffff;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        #notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #notification.hide {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        /* Media queries for responsiveness */
+        @media screen and (max-width: 800px) {
+            table thead {
+                display: none;
+            }
+
+            table tr {
+                display: block;
+                margin-bottom: 1rem;
+                border-bottom: 2px solid #1d1d1d;
+            }
+
+            table td {
+                display: block;
+                text-align: right;
+            }
+
+            table td:before {
+                content: attr(aria-label);
+                float: left;
+                font-weight: bold;
+            }
+
+            tr .edit, tr .delete {
+                display: flex;
+                justify-content: center;
+                width: 100%;
+            }
+
+            .edit {
+                margin: 0 0 15px 0;
+            }
+        }
+
     </style>
 </head>
 <body>
 <h1><a href="/api/admin/home">Admin Панель</a> - Пользователи</h1>
+
 <input type="text" id="searchBox" placeholder="Поиск по имени или телефону" oninput="filterUsers()">
+
+<div id="notification" class="notification is-info" style="display: none;">
+    <button class="delete" onclick="closeModal()"></button>
+    <span id="saveMessage"></span>
+</div>
+
 <button class="add" onclick="showAddUserForm()">Добавить пользователя</button>
-<div id="addUserForm" style="display: none;">
+
+
+<div id="addUserForm">
     <h2>Добавление пользователя</h2>
     <label for="addName">Имя:</label>
     <input type="text" id="addName" name="name">
-    <br><br>
     <label for="addPhone">Телефон:</label>
     <input type="text" id="addPhone" name="phone">
-    <br><br>
     <label for="addEmail">Email:</label>
     <input type="email" id="addEmail" name="email">
-    <br><br>
+    <label for="addTgId">TG ID:</label>
+    <input type="text" id="addTgId" name="tgid">
     <button class="add" onclick="addUser()">Подтвердить</button>
-    <button onclick="hideAddUserForm()" style="background-color: #282828; color: #ffffff; padding: 11px">Отмена</button>
+    <button onclick="hideAddUserForm()"
+            style="background-color: #282828; color: #ffffff; padding: 11px; font-weight: 700;">Отмена
+    </button>
 </div>
-<div id="updateUserForm" style="display: none;">
+
+<div id="updateUserForm">
     <h2>Изменение пользователя</h2>
     <label for="updateName">Имя:</label>
     <input type="text" id="updateName" name="name">
-    <br><br>
     <label for="updatePhone">Телефон:</label>
     <input type="text" id="updatePhone" name="phone">
-    <br><br>
     <label for="updateEmail">Email:</label>
     <input type="email" id="updateEmail" name="email">
-    <br><br>
     <button class="add" onclick="updateUser()">Подтвердить</button>
-    <button onclick="hideUpdateUserForm()" style="background-color: #282828; color: #ffffff; padding: 11px">Отмена</button>
+    <button onclick="hideUpdateUserForm()"
+            style="background-color: #282828; color: #ffffff; padding: 11px; font-weight: 700;">Отмена
+    </button>
 </div>
-<table id="userTable">
+
+<table id="userTable" class="table table-dark">
     <thead>
     <tr>
         <th>ID</th>
         <th>Имя</th>
         <th>Телефон</th>
         <th>Email</th>
-        <th>Actions</th>
+        <th>TG ID</th>
+        <th>Редактирование</th>
+        <th>Удаление</th>
     </tr>
     </thead>
-    <tbody>
-    </tbody>
+    <tbody></tbody>
 </table>
 <script>
-    let users = [
-        {id: 1, name: 'John Doe', phone: '+79664563432', email: 'john.doe@example.com'},
-        {id: 2, name: 'Jane Smith', phone: '+79453452233', email: 'jane.smith@example.com'}
-    ];
+    let users = JSON.parse('{{ users|safe }}');
     let currentEditId = null;
+    let tgid = null;
+
+    // Показать всплывающее окно
+    function showNotification(message) {
+        const notification = document.getElementById('notification');
+        const saveMessage = document.getElementById('saveMessage');
+
+        saveMessage.textContent = message; // Установить текст сообщения
+        notification.classList.add('show');
+        notification.style.display = 'block';
+
+        // Автоматически скрыть через 3 секунды
+        setTimeout(() => {
+            hideNotification();
+        }, 3000);
+    }
+
+    // Скрыть всплывающее окно
+    function hideNotification() {
+        const notification = document.getElementById('notification');
+        notification.classList.add('hide');
+
+        // Удалить элемент после завершения анимации
+        setTimeout(() => {
+            notification.style.display = 'none';
+            notification.classList.remove('show', 'hide');
+        }, 300); // Должно совпадать с `transition` в CSS
+    }
+
+    // Закрытие через кнопку
+    function closeModal() {
+        hideNotification();
+    }
 
     function loadUsers(filteredUsers = users) {
         const tableBody = document.getElementById('userTable').querySelector('tbody');
@@ -166,15 +316,14 @@
         filteredUsers.forEach(user => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${user.id}</td>
-                <td>${user.name}</td>
-                <td>${user.phone}</td>
-                <td>${user.email}</td>
-                <td>
-                    <button class="edit" onclick="showUpdateUserForm(${user.id})">Изменить</button>
-                    <button class="delete" onclick="deleteUser(${user.id})">Удалить</button>
-                </td>
-            `;
+        <td aria-label="ID">${user.id}</td>
+        <td aria-label="Имя">${user.username}</td>
+        <td aria-label="Телефон">${'+7' + user.phone || ''}</td>
+        <td aria-label="E-mail">${user.email || ''}</td>
+        <td aria-label="Телеграм ID">${user.telegram_id || ''}</td>
+        <td><button class="edit" onclick="showUpdateUserForm(${user.id})">Изменить</button></td>
+        <td><button class="delete" onclick="deleteUser(${user.id}, ${user.telegram_id})">Удалить</button></td>
+    `;
             tableBody.appendChild(row);
         });
     }
@@ -182,7 +331,7 @@
     function filterUsers() {
         const query = document.getElementById('searchBox').value.toLowerCase();
         const filteredUsers = users.filter(user =>
-            user.name.toLowerCase().includes(query) || user.phone.toLowerCase().includes(query)
+            (user.username?.toLowerCase().includes(query) || user.phone?.toLowerCase().includes(query))
         );
         loadUsers(filteredUsers);
     }
@@ -193,25 +342,59 @@
 
     function hideAddUserForm() {
         document.getElementById('addUserForm').style.display = 'none';
+        resetForm('addUserForm');
     }
 
-    function addUser() {
-        const name = document.getElementById('addName').value;
-        const phone = document.getElementById('addPhone').value;
-        const email = document.getElementById('addEmail').value;
-
-        if (name && phone && email) {
-            const newUser = {
-                id: users.length ? users[users.length - 1].id + 1 : 1,
-                name,
-                phone,
-                email
-            };
-            users.push(newUser);
-            loadUsers();
-            hideAddUserForm();
+    function resetForm(formId) {
+        const form = document.getElementById(formId);
+        if (form.tagName === 'FORM') {
+            form.reset(); // Работает только для <form>
         } else {
-            alert('Пожалуйста, заполните все поля');
+            // Сбрасываем значения всех input внутри div или другого контейнера
+            const inputs = form.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.value = '';
+            });
+        }
+    }
+
+    async function addUser() {
+        const name = document.getElementById('addName').value.trim();
+        const phone = document.getElementById('addPhone').value.trim();
+        const email = document.getElementById('addEmail').value.trim();
+        const teleId = document.getElementById('addTgId').value.trim();
+
+        if (!name || !phone || !email || !teleId) {
+            showNotification('Пожалуйста, заполните все поля.');
+            return;
+        }
+
+        const newUser = {id: users.length + 1, username: name, phone, email, telegram_id: teleId};
+        if (users.some(user => user.email === email || user.phone === phone)) {
+            showNotification('Пользователь с таким email или телефоном уже существует.');
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/admin/users', {
+                method: 'POST',
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(newUser)
+            });
+
+            if (!response.ok) {
+                console.log(users.length)
+                console.log(await response.json());
+                throw new Error(`Ошибка ${response.status}: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            showNotification(data.msg || 'Пользователь успешно добавлен.');
+            users.push(newUser);
+            loadUsers(users);
+            hideAddUserForm();
+        } catch (e) {
+            showNotification(`Произошла ошибка: ${e.message}`);
         }
     }
 
@@ -219,42 +402,82 @@
         const user = users.find(u => u.id === id);
         if (user) {
             currentEditId = id;
-            document.getElementById('updateName').value = user.name;
-            document.getElementById('updatePhone').value = user.phone;
-            document.getElementById('updateEmail').value = user.email;
+            tgid = user.telegram_id || '';
+            document.getElementById('updateName').value = user.username;
+            document.getElementById('updatePhone').value = user.phone || '';
+            document.getElementById('updateEmail').value = user.email || '';
             document.getElementById('updateUserForm').style.display = 'block';
         }
     }
 
     function hideUpdateUserForm() {
+        resetForm('updateUserForm'); // Сбрасываем значения
         document.getElementById('updateUserForm').style.display = 'none';
     }
 
-    function updateUser() {
-        const name = document.getElementById('updateName').value;
-        const phone = document.getElementById('updatePhone').value;
-        const email = document.getElementById('updateEmail').value;
+    async function updateUser() {
+        const name = document.getElementById('updateName').value.trim();
+        const phone = document.getElementById('updatePhone').value.trim();
+        const email = document.getElementById('updateEmail').value.trim();
 
-        if (currentEditId && name && phone && email) {
-            const userIndex = users.findIndex(u => u.id === currentEditId);
-            if (userIndex > -1) {
-                users[userIndex] = {id: currentEditId, name, phone, email};
-                loadUsers();
-                hideUpdateUserForm();
-                currentEditId = null;
+        if (!currentEditId || !name || !phone || !email || !tgid) {
+            showNotification('Пожалуйста, заполните все поля.');
+            return;
+        }
+
+        const userIndex = users.findIndex(u => u.id === currentEditId);
+        if (userIndex > -1) {
+            users[userIndex] = {...users[userIndex], username: name, phone, email, telegram_id: tgid};
+            loadUsers(users);
+            hideUpdateUserForm();
+            currentEditId = null;
+
+            try {
+                const response = await fetch(`/api/admin/users/${tgid}`, {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(users[userIndex])
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Ошибка ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                showNotification(data.msg || 'Пользователь успешно обновлён.');
+            } catch (e) {
+                showNotification(`Произошла ошибка: ${e.message}`);
             }
-        } else {
-            alert('Пожалуйста, заполните все поля');
         }
     }
 
-    function deleteUser(id) {
+    async function deleteUser(id, telegramId) {
         users = users.filter(user => user.id !== id);
-        loadUsers();
+        loadUsers(users);
+
+        try {
+            const response = await fetch(`/api/admin/users/${telegramId}`, {
+                method: 'DELETE',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({telegram_id: telegramId})
+            });
+
+            if (!response.ok) {
+                throw new Error(`Ошибка ${response.status}: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            showNotification(data.msg || 'Пользователь успешно удалён.');
+        } catch (e) {
+            showNotification(`Произошла ошибка: ${e.message}`);
+        }
     }
 
     // Initial load
-    loadUsers();
+    window.addEventListener('DOMContentLoaded', () => {
+        loadUsers(users);
+    });
+
 </script>
 </body>
 </html>

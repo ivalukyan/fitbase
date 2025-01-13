@@ -1,8 +1,10 @@
 """
 Utils DB
 """
-from app.database.models import SessionMaker
-from app.database.models import User, Standards, Admin
+import logging
+from database.models import SessionMaker
+from database.models import User, Standards, Admin
+from admin_app.schemas.user_schemas import UserSchemas
 
 db = SessionMaker()
 
@@ -14,7 +16,8 @@ async def add_user(username: str, phone: str, telegram_id: int, email: str | Non
 
 
 async def update_user(telegram_id: int, username: str, phone: str, email: str):
-    db.query(User).filter(User.telegram_id == telegram_id).update({'username': username, 'phone': phone, 'email': email})
+    db.query(User).filter(User.telegram_id == telegram_id).update({'username': username, 'phone': phone,
+                                                                   'email': email, 'telegram_id': telegram_id})
     db.commit()
 
 
@@ -23,6 +26,22 @@ async def get_user_by_telegram_id(telegram_id: int) -> bool:
     if not user:
         return False
     return True
+
+
+async def get_all_users() -> list:
+    users = db.query(User).all()
+    
+    data = []
+    
+    for user in users:
+        data.append(UserSchemas.from_orm(user).dict())
+    return data
+
+
+async def delete_user(telegram_id: int):
+    user = db.query(User).filter(User.telegram_id == telegram_id).first()
+    db.delete(user)
+    db.commit()
 
 
 async def add_standard(telegram_id: int):

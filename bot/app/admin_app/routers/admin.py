@@ -1,3 +1,4 @@
+import json
 from fastapi import APIRouter, HTTPException, status, Request, Depends
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
@@ -5,6 +6,10 @@ from uuid import UUID
 
 from admin_app.auth.dependencies import get_current_admin, get_db_session
 from admin_app.schemas.admin_schemas import AdminSchemas
+
+from database.utils import get_all_users, add_user, update_user, delete_user
+
+from admin_app.schemas.user_schemas import UserSchemas
 
 router = APIRouter(
     prefix="/admin",
@@ -31,22 +36,30 @@ async def get_admin_me(admin: AdminSchemas = Depends(get_current_admin)):
 
 @router.get("/users", description="Получение всех пользователей")
 async def get_admin_users(request: Request, db: Session = Depends(get_db_session)):
-    return templates.TemplateResponse("users.html", {"request": request})
+    
+    users = await get_all_users()
+    
+    return templates.TemplateResponse("users.html", {"request": request, 'users': json.dumps(users)})
 
 
-@router.post("users", description="Добавление пользователя")
-async def create_admin_user(db: Session = Depends(get_db_session)):
-    return {'msg': 'Добавление пользователя'}
+@router.post("/users", description="Добавление пользователя", response_model=UserSchemas)
+async def create_admin_user(user: UserSchemas):
+    await add_user(username=user.username, phone=user.phone, email=user.email, telegram_id=user.telegram_id)
+    user.msg = 'Добавление пользователя'
+    return user
 
 
-@router.put("/users/{id}", description='Обновление данных пользователя')
-async def update_admin_user(id: UUID, db: Session = Depends(get_db_session)):
-    return {'msg': 'Обновление пользователя'}
+@router.put("/users/{id}", description='Обновление данных пользователя', response_model=UserSchemas)
+async def update_admin_user(id: int, user: UserSchemas):
+    await update_user(username=user.username, phone=user.phone, email=user.email, telegram_id=user.telegram_id)
+    user.msg = 'Обновление пользователя'
+    return user
 
 
 @router.delete("/users/{id}", description='Удаление данных пользователя')
-async def delete_admin_user(id: UUID, db: Session = Depends(get_db_session)):
-    return {'msg', 'Удаление данных пользователя'}
+async def delete_admin_user(id: int):
+    await delete_user(telegram_id=id)
+    return {'msg': 'Удаление данных пользователя'}
 
 
 @router.get("/normative", description="Получение результатов пользователей")

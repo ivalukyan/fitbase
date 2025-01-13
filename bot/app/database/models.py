@@ -20,7 +20,7 @@ Base = declarative_base()
 
 class Admin(Base):
     __tablename__ = 'admins'
-    id = Column(UUID, primary_key=True, default=uuid4)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     username = Column(String, nullable=False)
     phone = Column(String, nullable=False)
     email = Column(String, nullable=True)
@@ -30,7 +30,7 @@ class Admin(Base):
 
 class User(Base):
     __tablename__ = 'users'
-    id = Column(UUID, primary_key=True, default=uuid4)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     username = Column(String, nullable=False)
     phone = Column(String, nullable=False)
     email = Column(String, nullable=True)
@@ -39,7 +39,7 @@ class User(Base):
 
 class Standards(Base):
     __tablename__ = 'standards'
-    id = Column(UUID, primary_key=True, default=uuid4)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     telegram_id = Column(BigInteger, nullable=True)
     grom = Column(String, nullable=True, default='00:00')
     turkish_barbell_lifting = Column(Integer, nullable=True, default=0)
