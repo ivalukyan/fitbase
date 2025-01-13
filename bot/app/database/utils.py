@@ -5,6 +5,7 @@ import logging
 from database.models import SessionMaker
 from database.models import User, Standards, Admin
 from admin_app.schemas.user_schemas import UserSchemas
+from admin_app.schemas.admin_schemas import AdminSchemas
 
 db = SessionMaker()
 
@@ -97,3 +98,13 @@ async def get_top_by_name(name: str):
 
 async def get_admin_by_telegram_id(telegram_id: int):
     return db.query(Admin).filter(Admin.telegram_id == telegram_id).first()
+
+
+async def get_all_admins():
+    admins = db.query(Admin).all()
+
+    data = []
+
+    for admin in admins:
+        data.append(AdminSchemas.from_orm(admin).dict())
+    return data

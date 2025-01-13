@@ -3,8 +3,11 @@ from uuid import UUID
 
 
 class AdminSchemas(BaseModel):
-    id: UUID
+    id: int
     username: str
     password: str
     phone: str
     email: str | None = None
+
+    class Config:
+        from_attributes=True

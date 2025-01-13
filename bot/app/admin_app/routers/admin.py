@@ -7,7 +7,7 @@ from uuid import UUID
 from admin_app.auth.dependencies import get_current_admin, get_db_session
 from admin_app.schemas.admin_schemas import AdminSchemas
 
-from database.utils import get_all_users, add_user, update_user, delete_user
+from database.utils import get_all_users, add_user, update_user, delete_user, get_all_admins
 
 from admin_app.schemas.user_schemas import UserSchemas
 
@@ -25,8 +25,12 @@ async def login_admin(request: Request, db: Session = Depends(get_db_session)):
 
 
 @router.get("/home", description="Главная страница")
-async def home(request: Request, db: Session = Depends(get_db_session)):
-    return templates.TemplateResponse("home.html", {"request": request})
+async def home(request: Request):
+    users = await get_all_users()
+    admins = await get_all_admins()
+
+    return templates.TemplateResponse("home.html", {"request": request, "users": json.dumps(users),
+                                                    "admins": json.dumps(admins)})
 
 
 @router.get("/me", response_model=AdminSchemas, description="Профиль администратора")
