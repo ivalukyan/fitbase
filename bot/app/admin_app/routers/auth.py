@@ -16,7 +16,7 @@ router = APIRouter(
 @router.post("/token")
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(),
                                  db_session: Session = Depends(get_db_session)) -> Token:
-    admin = await authenticate_admin(db_session, form_data.username)
+    admin = await authenticate_admin(db_session, form_data.username, form_data.password)
     if not admin:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

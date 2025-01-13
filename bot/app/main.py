@@ -7,7 +7,7 @@ from admin_app.routers.admin import router as admin_router
 from admin_app.routers.auth import router as auth_router
 
 app = FastAPI(version='1.5.0')
-app.mount("/static", StaticFiles(directory="admin_app/static"), name="static")
+app.mount("/api/static", StaticFiles(directory="admin_app/static"), name="static")
 api_router = APIRouter(
     prefix="/api",
     tags=["api"],

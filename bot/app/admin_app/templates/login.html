@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link href="{{ url_for('static', path='/css/login.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/login.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
@@ -58,7 +59,7 @@
             const response = await fetch("/api/auth/token", requestOptions);
             if (response.ok) {
                 const data = await response.json();
-                localStorage.setItem("token", data.access_token); // Рассмотрите хранение токена более безопасно
+                localStorage.setItem("token", data.access_token);
                 window.location.href = "/api/admin/home"; // Перенаправление пользователя
             } else {
                 alert("Ошибка авторизации. Попробуйте позже.");
@@ -75,9 +76,6 @@
         const login = loginInput.value.trim();
         const password = passwordInput.value;
 
-        console.log(login);
-        console.log(password);
-
         if (!login || !password) {
             alert("Пожалуйста, заполните все поля.");
             return;
@@ -91,7 +89,7 @@
             }
         } else {
             if (checkPhone(login)) {
-                await fetchAuth(login, password);
+                await fetchAuth(login.slice(-11), password);
             } else {
                 alert("Номер телефона введен некорректно! Номер должен выглядеть: +7XXXXXXXXXX");
             }

@@ -28,9 +28,12 @@ async def get_admin(db_session: Session, phone: str):
     return db_session.query(Admin).filter(Admin.phone == phone).first()
 
 
-async def authenticate_admin(db_session: Session, username: str):
+async def authenticate_admin(db_session: Session, username: str, password: str):
     admin = await get_admin(db_session, username)
     if not admin:
+        return None
+    
+    if admin.password != password:
         return None
     return admin
 
