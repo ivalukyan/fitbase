@@ -69,7 +69,6 @@ async def delete_admin_user(id: int):
 @router.get("/normative", description="Получение результатов пользователей")
 async def all_results(request: Request):
     normative = await get_all_standards()
-    print(normative)
     return templates.TemplateResponse("normative.html", {"request": request, 'normative': json.dumps(normative)})
 
 

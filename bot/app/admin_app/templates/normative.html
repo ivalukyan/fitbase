@@ -87,7 +87,7 @@
             margin: 0 0 20px 0;
         }
 
-        #addUserForm, #updateUserForm {
+        #addNormativeForm {
             background-color: var(--dark-gray);
             padding: 20px;
             border: 1px solid var(--border-color);
@@ -236,7 +236,7 @@
 
         .card button {
             background-color: #1a1d1d;
-            box-shadow: rgba(0,0,0, 0.4) 0 5px 15px 0;
+            box-shadow: rgba(0, 0, 0, 0.4) 0 5px 15px 0;
             padding: 15px;
             border-radius: 11px;
             font-size: 16px;
@@ -308,7 +308,9 @@
     <label for="addFrontSquat">Присед фронтальный (кг):</label>
     <input type="number" id="addFrontSquat" name="front_squat">
     <button class="add" onclick="addNormative()">Подтвердить</button>
-    <button onclick="hideAddNormativeForm()" style="background-color: #282828; color: #ffffff; padding: 11px; font-weight: 700;">Отмена</button>
+    <button onclick="hideAddNormativeForm()"
+            style="background-color: #282828; color: #ffffff; padding: 11px; font-weight: 700;">Отмена
+    </button>
 </div>
 
 <div class="grid-normative" id="normativeGrid">
@@ -317,6 +319,7 @@
     let normative = JSON.parse('{{ normative|safe }}');
     let currentEditId = null;
     let tgid = null;
+
 
     // Показать всплывающее окно
     function showNotification(message) {
@@ -350,19 +353,24 @@
         hideNotification();
     }
 
-    function loadNormative(filteredUsers = users) {
+    function openViewCard(normativeId) {
+        const card = document.getElementById(`cardView${normativeId}`);
+        card.style.display = card.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function loadNormative(filteredNormative = normative) {
         const gridBody = document.getElementById('normativeGrid');
         gridBody.innerHTML = '';
-        filteredUsers.forEach(normative => {
+        filteredNormative.forEach(normative => {
             const card = document.createElement('div');
             card.className = 'card';
             card.innerHTML = `
         <h2>${normative.username}</h2>
         <h4>TG ID: ${normative.telegram_id}</h4>
-        <button class="open-button" type="button" data-bs-toggle="collapse" data-bs-target="#${normative.id}" aria-controls="navbarNav">
+        <button class="open-button" type="button" onclick="openViewCard(${normative.id})">
             Открыть
         </button>
-        <div class="collapse navbar-collapse mt-4" id="${normative.id}">
+        <div class="navbar mt-4" id="cardView${normative.id}" style="display: none;animation: fadeIn 0.3s ease-in-out;">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
                     <p>Гром - <span>${normative.grom || 'н/ф'}</span></p>
@@ -436,10 +444,10 @@
 
     function filterNormative() {
         const query = document.getElementById('searchBox').value.toLowerCase();
-        const filteredUsers = users.filter(user =>
-            (user.username?.toLowerCase().includes(query) || user.telegram_id?.toLowerCase().includes(query))
+        const filteredNormative = normative.filter(normative =>
+            (normative.username?.toLowerCase().includes(query) || normative.telegram_id?.toLowerCase().includes(query))
         );
-        loadUsers(filteredUsers);
+        loadUsers(filteredNormative);
     }
 
     function showAddNormativeForm() {
