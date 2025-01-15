@@ -32,50 +32,12 @@
             font-size: 24px;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-            background-color: var(--dark-gray);
-            color: #ffffff;
-        }
-
-        table, th, td {
-            border: 1px solid var(--border-color);
-        }
-
-        th, td {
-            padding: 10px;
-            text-align: left;
-        }
-
-        th {
-            background-color: var(--border-color);
-            font-size: 16px;
-        }
-
-        table tr:hover {
-            background-color: #333333;
-        }
-
         button {
             padding: var(--button-padding);
             margin: 0 2px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-        }
-
-        .edit {
-            background-color: #1DB954;
-            color: white;
-            width: 100%;
-        }
-
-        .delete {
-            background-color: #e91429;
-            color: white;
-            width: 100%;
         }
 
         .add {
@@ -222,7 +184,7 @@
         .grid-normative {
             display: grid;
             gap: 20px;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
         }
 
         .card {
@@ -231,7 +193,8 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            display: flex;
+            display: block;
+            max-width: 450px;
         }
 
         .card button {
@@ -244,21 +207,29 @@
             color: #FFFFFF;
         }
 
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .edit-button {
+            border: 1px solid var(--primary-color);
+        }
+
+        .edit-button:hover {
+            background-color: var(--primary-color);
+        }
     </style>
 </head>
 <body>
 <h1><a href="/api/admin/home">Admin Панель</a> - Нормативы</h1>
-
 <input type="text" id="searchBox" placeholder="Поиск телеграмм id" oninput="filterNormative()">
-
 <div id="notification" class="notification is-info" style="display: none;">
     <button class="delete" onclick="closeModal()"></button>
     <span id="saveMessage"></span>
 </div>
-
 <button class="add" onclick="showAddNormativeForm()">Добавить нормативы</button>
-
-
 <div id="addNormativeForm" style="display: none">
     <h2>Добавление норматива</h2>
     <label for="addUsername">Имя</label>
@@ -312,8 +283,12 @@
             style="background-color: #282828; color: #ffffff; padding: 11px; font-weight: 700;">Отмена
     </button>
 </div>
-
-<div class="grid-normative" id="normativeGrid">
+<div class="grid-normative" id="normativeGrid"></div>
+<div id="normativeModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close-button" onclick="closeModalCard()">&times;</span>
+        <div id="modalBody"></div>
+    </div>
 </div>
 <script>
     let normative = JSON.parse('{{ normative|safe }}');
@@ -353,11 +328,6 @@
         hideNotification();
     }
 
-    function openViewCard(normativeId) {
-        const card = document.getElementById(`cardView${normativeId}`);
-        card.style.display = card.style.display === 'none' ? 'block' : 'none';
-    }
-
     function loadNormative(filteredNormative = normative) {
         const gridBody = document.getElementById('normativeGrid');
         gridBody.innerHTML = '';
@@ -365,90 +335,76 @@
             const card = document.createElement('div');
             card.className = 'card';
             card.innerHTML = `
-        <h2>${normative.username}</h2>
-        <h4>TG ID: ${normative.telegram_id}</h4>
-        <button class="open-button" type="button" onclick="openViewCard(${normative.id})">
-            Открыть
-        </button>
-        <div class="navbar mt-4" id="cardView${normative.id}" style="display: none;animation: fadeIn 0.3s ease-in-out;">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <p>Гром - <span>${normative.grom || 'н/ф'}</span></p>
-                </li>
-                <li class="nav-item">
-                    <p>Турецкий подъем штанги - <span>${normative.turkish_barbell_lifting} кг</span></p>
-                </li>
-                <li class="nav-item">
-                    <p>Скакалка - <span>${normative.skipping_rope} раз</span></p>
-                </li>
-                <li class="nav-item">
-                    <p>Жим лежа - <span>${normative.bench_press} кг</span></p>
-                </li>
-                <li class="nav-item">
-                    <p>Протяжка штанги - <span>${normative.rod_length} кг</span></p>
-                </li>
-                <li class="nav-item">
-                    <p>Челночный бег - <span>${normative.shuttle_run} раз</span></p>
-                </li>
-                <li class="nav-item">
-                    <p>Ягодичный мостик - <span>${normative.glute_bridge} кг</span></p>
-                </li>
-                <li class="nav-item">
-                    <p>Подтягивания - <span>${normative.pull_ups} раз</span></p>
-                </li>
-                <li class="nav-item">
-                    <p>Прыжки на куб - <span>${normative.cubic_jumps} см</span></p>
-                </li>
-                <li class="nav-item">
-                    <p>Взятие штанги на грудь - <span>${normative.lifting_barbell_on_the_chest_kilo} кг</span></p>
-                </li>
-                <li class="nav-item">
-                    <p>Становая тяга акселя - <span>${normative.axel_deadlift} кг</span></p>
-                </li>
-                <li class="nav-item">
-                    <p>Стойка на руках - <span>${normative.handstand} мин:сек</span></p>
-                </li>
-                <li class="nav-item">
-                    <p>Присед классический - <span>${normative.classic_squat} кг</span></p>
-                </li>
-                <li class="nav-item">
-                    <p>Турецкий подъем гири - <span>${normative.turkish_kettlebell_lifting} кг</span></p>
-                </li>
-                <li class="nav-item">
-                    <p>Отжимания от пола - <span>${normative.push_ups} раз</span></p>
-                </li>
-                <li class="nav-item">
-                    <p>Прогулка с гирями - <span>${normative.walking_kettlebells} метров</span></p>
-                </li>
-                <li class="nav-item">
-                    <p>Становая тяга штанги - <span>${normative.deadlift} кг</span></p>
-                </li>
-                <li class="nav-item">
-                    <p>Прыжки в длину - <span>${normative.long_jump} см</span></p>
-                </li>
-                <li class="nav-item">
-                    <p>Рывок штанги - <span>${normative.barbell_jerk} кг</span></p>
-                </li>
-                <li class="nav-item">
-                    <p>Удержание акселя - <span>${normative.axel_hold} мин:сек</span></p>
-                </li>
-                <li class="nav-item">
-                    <p>Присед фронтальный - <span>${normative.front_squat} кг</span></p>
-                </li>
-            </ul>
-        </div>
-            `;
+            <h2>${normative.username}</h2>
+            <h4>TG ID: ${normative.telegram_id}</h4>
+            <button type="button" class="open-button" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+              Открыть
+            </button>
+
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header" style="background-color: #1b1b1a">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Нормативы</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="background-color: var(--primary-color)"></button>
+                  </div>
+                  <div class="modal-body" style="background-color: #1b1b1a">
+                    <ul>
+                    <li>Гром: ${normative.grom || 'н/ф'}</li>
+                    <li>Турецкий подъем штанги: ${normative.turkish_barbell_lifting} кг</li>
+                    <li>Скакалка: ${normative.skipping_rope} раз</li>
+                    <li>Жим лежа: ${normative.bench_press} кг</li>
+                    <li>Протяжка штанги: ${normative.rod_length} кг</li>
+                    <li>Челночный бег: ${normative.shuttle_run} раз</li>
+                    <li>Ягодичный мостик: ${normative.glute_bridge} кг</li>
+                    <li>Подтягивания: ${normative.pull_ups} раз</li>
+                    <li>Прыжки на куб: ${normative.cubic_jumps} см</li>
+                    <li>Взятие штанги на грудь: ${normative.lifting_barbell_on_the_chest_kilo} кг</li>
+                    <li>Становая тяга акселя: ${normative.axel_deadlift} кг</li>
+                    <li>Стойка на руках: ${normative.handstand} мин:сек</li>
+                    <li>Присед классический: ${normative.classic_squat} кг</li>
+                    <li>Турецкий подъем гири: ${normative.turkish_kettlebell_lifting} кг</li>
+                    <li>Отжимания от пола: ${normative.push_ups} раз</li>
+                    <li>Прогулка с гирями: ${normative.walking_kettlebells} метров</li>
+                    <li>Становая тяга штанги: ${normative.deadlift} кг</li>
+                    <li>Прыжки в длину: ${normative.long_jump} см</li>
+                    <li>Рывок штанги: ${normative.barbell_jerk} кг</li>
+                    <li>Удержание акселя: ${normative.axel_hold} мин:сек</li>
+                    <li>Присед фронтальный: ${normative.front_squat} кг</li>
+                </ul>
+                  </div>
+                  <div class="modal-footer" style="background-color: #1b1b1a">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button type="button" class="edit-button">Редактировать</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+        `;
             gridBody.appendChild(card);
         });
+    }
+
+    function openViewCard(normative) {
+        const modal = document.getElementById('normativeModal');
+        const modalBody = document.getElementById('modalBody');
+
+        modalBody.innerHTML = `
+
+        <h2>${normative.username}</h2>
+
+    `;
+        modal.style.display = 'flex';
     }
 
     function filterNormative() {
         const query = document.getElementById('searchBox').value.toLowerCase();
         const filteredNormative = normative.filter(normative =>
-            (normative.username?.toLowerCase().includes(query) || normative.telegram_id?.toLowerCase().includes(query))
+            (normative.username?.toLowerCase().includes(query) || String(normative.telegram_id || '').toLowerCase().includes(query))
         );
-        loadUsers(filteredNormative);
+        loadNormative(filteredNormative);
     }
+
 
     function showAddNormativeForm() {
         document.getElementById('addNormativeForm').style.display = 'block';
