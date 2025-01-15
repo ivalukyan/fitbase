@@ -41,6 +41,7 @@ class Standards(Base):
     __tablename__ = 'standards'
     id = Column(Integer, primary_key=True, autoincrement=True)
     telegram_id = Column(BigInteger, nullable=True)
+    username = Column(String, nullable=True)
     grom = Column(String, nullable=True, default='00:00')
     turkish_barbell_lifting = Column(Integer, nullable=True, default=0)
     jump_rope = Column(Integer, nullable=True, default=0)

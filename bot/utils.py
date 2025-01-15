@@ -42,8 +42,8 @@ async def add_user(username: str, phone: str, telegram_id: int, email: str | Non
 
 
 # Standard
-async def add_standard(telegram_id: int):
-    standard = Standards(telegram_id=telegram_id)
+async def add_standard(telegram_id: int, username: str):
+    standard = Standards(telegram_id=telegram_id, username=username)
     db.add(standard)
     db.commit()
 

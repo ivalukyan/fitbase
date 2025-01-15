@@ -6,6 +6,7 @@ from database.models import SessionMaker
 from database.models import User, Standards, Admin
 from admin_app.schemas.user_schemas import UserSchemas
 from admin_app.schemas.admin_schemas import AdminSchemas
+from admin_app.schemas.normative_schemas import NormativeSchemas
 
 db = SessionMaker()
 
@@ -36,6 +37,16 @@ async def delete_user(telegram_id: int):
     user = db.query(User).filter(User.telegram_id == telegram_id).first()
     db.delete(user)
     db.commit()
+
+
+async def get_all_standards() -> list:
+    standards = db.query(Standards).all()
+
+    data = []
+
+    for standard in standards:
+        data.append(NormativeSchemas.from_orm(standard).dict())
+    return data
 
 
 async def add_standard(telegram_id: int):

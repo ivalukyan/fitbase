@@ -7,7 +7,7 @@ from uuid import UUID
 from admin_app.auth.dependencies import get_current_admin, get_db_session
 from admin_app.schemas.admin_schemas import AdminSchemas
 
-from database.utils import get_all_users, add_user, update_user, delete_user, get_all_admins
+from database.utils import get_all_users, add_user, update_user, delete_user, get_all_admins, get_all_standards
 
 from admin_app.schemas.user_schemas import UserSchemas
 
@@ -67,8 +67,10 @@ async def delete_admin_user(id: int):
 
 
 @router.get("/normative", description="Получение результатов пользователей")
-async def all_results(request: Request, db: Session = Depends(get_db_session)):
-    return templates.TemplateResponse("normative.html", {"request": request})
+async def all_results(request: Request):
+    normative = await get_all_standards()
+    print(normative)
+    return templates.TemplateResponse("normative.html", {"request": request, 'normative': json.dumps(normative)})
 
 
 @router.post("/normative", description="Добавление результат норматива пользователя")

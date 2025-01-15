@@ -318,7 +318,7 @@
             row.innerHTML = `
         <td aria-label="ID">${user.id}</td>
         <td aria-label="Имя">${user.username}</td>
-        <td aria-label="Телефон">${'+7' + user.phone || ''}</td>
+        <td aria-label="Телефон">${'+' + user.phone || ''}</td>
         <td aria-label="E-mail">${user.email || ''}</td>
         <td aria-label="Телеграм ID">${user.telegram_id || ''}</td>
         <td><button class="edit" onclick="showUpdateUserForm(${user.id})">Изменить</button></td>
@@ -370,7 +370,7 @@
         }
 
         const newUser = {id: users.length + 1, username: name, phone, email, telegram_id: teleId};
-        if (users.some(user => user.email === email || user.phone === phone)) {
+        if (users.some(user => user.email === email || user.phone === phone || user.telegram_id === teleId)) {
             showNotification('Пользователь с таким email или телефоном уже существует.');
             return;
         }
@@ -422,6 +422,11 @@
 
         if (!currentEditId || !name || !phone || !email || !tgid) {
             showNotification('Пожалуйста, заполните все поля.');
+            return;
+        }
+
+        if (users.some(user => user.email === email || user.phone === phone || user.telegram_id === tgid)) {
+            showNotification('Пользователь с таким email или телефоном уже существует.');
             return;
         }
 

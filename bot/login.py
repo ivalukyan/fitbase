@@ -34,15 +34,15 @@ async def process_contact(message: Message) -> None:
     user_phone = message.contact.phone_number[-11:]
 
     contacts = await get_all_contacts()
-    contacts.append('79687518203')
+    contacts.append('79687518203') # Удалить после тестирования
 
     if user_phone in contacts:
         await message.answer("Авторизация успешна! Добро пожаловать.", reply_markup=ReplyKeyboardRemove())
         MESSAGES.append(message.message_id)
-        asyncio.create_task(add_user(username=message.from_user.username,
+        asyncio.create_task(add_user(username=message.from_user.first_name,
                                      phone=user_phone,
                                      telegram_id=message.from_user.id))
-        asyncio.create_task(add_standard(telegram_id=message.from_user.id))
+        asyncio.create_task(add_standard(telegram_id=message.from_user.id, username=message.from_user.first_name))
         callback_query = CallbackQuery(id=str(uuid4()), from_user=message.from_user, data="menu",
                                        message=message, chat_instance="auth")
         await menu(callback_query)
