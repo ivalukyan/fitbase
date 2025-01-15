@@ -352,7 +352,7 @@
                     <ul>
                     <li>Гром: ${normative.grom || 'н/ф'}</li>
                     <li>Турецкий подъем штанги: ${normative.turkish_barbell_lifting} кг</li>
-                    <li>Скакалка: ${normative.skipping_rope} раз</li>
+                    <li>Скакалка: ${normative.jump_rope} раз</li>
                     <li>Жим лежа: ${normative.bench_press} кг</li>
                     <li>Протяжка штанги: ${normative.rod_length} кг</li>
                     <li>Челночный бег: ${normative.shuttle_run} раз</li>
@@ -375,7 +375,7 @@
                   </div>
                   <div class="modal-footer" style="background-color: #1b1b1a">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-                    <button type="button" class="edit-button">Редактировать</button>
+                    <button type="button" class="edit-button" onclick="showUpdateUserForm(event, normative.id)">Редактировать</button>
                   </div>
                 </div>
               </div>
@@ -434,7 +434,7 @@
         const telegramid = document.getElementById('addTelegramId').value.trim();
         const grom = document.getElementById('addGrom').value.trim();
         const turkish_barbell_lifting = document.getElementById('addTurkishBarbellLifting').value.trim();
-        const skipping_rope = document.getElementById('addSkippingRope').value.trim();
+        const jump_rope = document.getElementById('addSkippingRope').value.trim();
         const bench_press = document.getElementById('addBenchPress').value.trim();
         const rod_length = document.getElementById('addRodLength').value.trim();
         const shuttle_run = document.getElementById('addShuttleRun').value.trim();
@@ -460,17 +460,21 @@
             return;
         }
 
-        const newUser = {id: users.length + 1, username: name, phone, email, telegram_id: teleId};
-        if (users.some(user => user.email === email || user.phone === phone || user.telegram_id === teleId)) {
+        const newNormative = {id: users.length + 1, username, telegram_id, grom,
+        turkish_barbell_lifting, jump_rope, bench_press, rod_length, shuttle_run, glute_bridge,
+        pull_ups, cubic_jumps, lifting_barbell_on_the_chest_kilo, axel_deadlift, handstand,
+        classic_squat, turkish_kettlebell_lifting, push_ups, walking_kettlebells, deadlift,
+        long_jump, barbell_jerk, axel_hold, front_squat};
+        if (users.some(user => user.telegram_id === telegramid)) {
             showNotification('Пользователь с таким email или телефоном уже существует.');
             return;
         }
 
         try {
-            const response = await fetch('/api/admin/users', {
+            const response = await fetch('/api/admin/normative', {
                 method: 'POST',
                 headers: {"Content-Type": "application/json"},
-                body: JSON.stringify(newUser)
+                body: JSON.stringify(newNormative)
             });
 
             if (!response.ok) {
@@ -481,70 +485,17 @@
 
             const data = await response.json();
             showNotification(data.msg || 'Пользователь успешно добавлен.');
-            users.push(newUser);
-            loadUsers(users);
+            normative.push(newNormative);
+            loadNormative(normative);
             hideAddUserForm();
         } catch (e) {
             showNotification(`Произошла ошибка: ${e.message}`);
         }
     }
 
-    function showUpdateUserForm(id) {
-        const user = users.find(u => u.id === id);
-        if (user) {
-            currentEditId = id;
-            tgid = user.telegram_id || '';
-            document.getElementById('updateName').value = user.username;
-            document.getElementById('updatePhone').value = user.phone || '';
-            document.getElementById('updateEmail').value = user.email || '';
-            document.getElementById('updateUserForm').style.display = 'block';
-        }
-    }
-
-    function hideUpdateUserForm() {
-        resetForm('updateUserForm'); // Сбрасываем значения
-        document.getElementById('updateUserForm').style.display = 'none';
-    }
-
-    async function updateUser() {
-        const name = document.getElementById('updateName').value.trim();
-        const phone = document.getElementById('updatePhone').value.trim();
-        const email = document.getElementById('updateEmail').value.trim();
-
-        if (!currentEditId || !name || !phone || !email || !tgid) {
-            showNotification('Пожалуйста, заполните все поля.');
-            return;
-        }
-
-        if (users.some(user => user.email === email || user.phone === phone || user.telegram_id === tgid)) {
-            showNotification('Пользователь с таким email или телефоном уже существует.');
-            return;
-        }
-
-        const userIndex = users.findIndex(u => u.id === currentEditId);
-        if (userIndex > -1) {
-            users[userIndex] = {...users[userIndex], username: name, phone, email, telegram_id: tgid};
-            loadUsers(users);
-            hideUpdateUserForm();
-            currentEditId = null;
-
-            try {
-                const response = await fetch(`/api/admin/users/${tgid}`, {
-                    method: 'PUT',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(users[userIndex])
-                });
-
-                if (!response.ok) {
-                    throw new Error(`Ошибка ${response.status}: ${response.statusText}`);
-                }
-
-                const data = await response.json();
-                showNotification(data.msg || 'Пользователь успешно обновлён.');
-            } catch (e) {
-                showNotification(`Произошла ошибка: ${e.message}`);
-            }
-        }
+    function showUpdateUserForm(e, normativeid) {
+        e.preventDefault();
+        window.location.href = `/api/admins/normative/${normativeid}`
     }
 
     async function deleteUser(id, telegramId) {
@@ -572,7 +523,6 @@
     window.addEventListener('DOMContentLoaded', () => {
         loadNormative(normative);
     });
-
 </script>
 </body>
 </html>

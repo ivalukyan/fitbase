@@ -7,9 +7,11 @@ from uuid import UUID
 from admin_app.auth.dependencies import get_current_admin, get_db_session
 from admin_app.schemas.admin_schemas import AdminSchemas
 
-from database.utils import get_all_users, add_user, update_user, delete_user, get_all_admins, get_all_standards
+from database.utils import (get_all_users, add_user, update_user, delete_user, get_all_admins, get_all_standards,
+                            update_standard, add_standard, delete_standard, get_standard_by_id)
 
 from admin_app.schemas.user_schemas import UserSchemas
+from admin_app.schemas.normative_schemas import NormativeSchemas
 
 router = APIRouter(
     prefix="/admin",
@@ -72,16 +74,28 @@ async def all_results(request: Request):
     return templates.TemplateResponse("normative.html", {"request": request, 'normative': json.dumps(normative)})
 
 
-@router.post("/normative", description="Добавление результат норматива пользователя")
-async def create_result(db: Session = Depends(get_db_session)):
+@router.post("/normative", description="Добавление результат норматива пользователя", response_model=NormativeSchemas)
+async def create_result(normative: NormativeSchemas):
+    await add_standard(username=normative.username, telegram_id=normative.telegram_id)
     return {"msg": "Добавление результата норматива пользователя"}
 
 
-@router.put("/normative/{id}", description="Изменение норматива пользователя")
-async def update_result(id: UUID, db: Session = Depends(get_db_session)):
-    return {"msg": "Обновление результата норматива пользователя"}
+@router.put("/normative/{id}", description="Изменение норматива пользователя", response_model=NormativeSchemas)
+async def update_result(request: Request, id: UUID, normative: NormativeSchemas):
+    await update_standard(username=normative.username, telegram_id=normative.telegram_id, grom=normative.grom,
+                          turkish_barbell_lifting=normative.turkish_barbell_lifting, jump_rope=normative.jump_rope,
+                          bench_press=normative.bench_press, rod_length=normative.rod_length,
+                          shuttle_run=normative.shuttle_run, glute_bridge=normative.glute_bridge, pull_ups=normative.pull_ups,
+                          cubic_jumps=normative.cubic_jumps, lifting_barbell_on_the_chest_count=normative.lifting_barbell_on_the_chest_count,
+                          axel_deadlift=normative.axel_deadlift, handstand=normative.handstand, classic_squat=normative.classic_squat,
+                          turkish_kettlebell_lifting=normative.turkish_kettlebell_lifting, push_ups=normative.push_ups,
+                          lifting_barbell_on_the_chest_kilo=normative.lifting_barbell_on_the_chest_kilo,
+                          walking_kettlebells=normative.walking_kettlebells, deadlift=normative.deadlift, long_jump=normative.long_jump,
+                          barbell_jerk=normative.barbell_jerk, axel_hold=normative.axel_hold, front_squat=normative.front_squat)
+    return {"msg": "Обновление результата норматива пользователя"} # Сдать template для обновления данных
 
 
 @router.delete("/normative/{id}", description="Удаление результата норматива пользователя")
-async def delete_result(id: UUID, db: Session = Depends(get_db_session)):
+async def delete_result(id: UUID):
+    await delete_user(telegram_id=id)
     return {"msg": "Удаление результата норматива пользователя"}
