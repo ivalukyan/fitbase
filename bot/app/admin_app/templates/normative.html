@@ -147,40 +147,6 @@
             transform: translateY(-20px);
         }
 
-        /* Media queries for responsiveness */
-        @media screen and (max-width: 800px) {
-            table thead {
-                display: none;
-            }
-
-            table tr {
-                display: block;
-                margin-bottom: 1rem;
-                border-bottom: 2px solid #1d1d1d;
-            }
-
-            table td {
-                display: block;
-                text-align: right;
-            }
-
-            table td:before {
-                content: attr(aria-label);
-                float: left;
-                font-weight: bold;
-            }
-
-            tr .edit, tr .delete {
-                display: flex;
-                justify-content: center;
-                width: 100%;
-            }
-
-            .edit {
-                margin: 0 0 15px 0;
-            }
-        }
-
         .grid-normative {
             display: grid;
             gap: 20px;
@@ -284,12 +250,6 @@
     </button>
 </div>
 <div class="grid-normative" id="normativeGrid"></div>
-<div id="normativeModal" class="modal" style="display: none;">
-    <div class="modal-content">
-        <span class="close-button" onclick="closeModalCard()">&times;</span>
-        <div id="modalBody"></div>
-    </div>
-</div>
 <script>
     let normative = JSON.parse('{{ normative|safe }}');
     let currentEditId = null;
@@ -337,11 +297,11 @@
             card.innerHTML = `
             <h2>${normative.username}</h2>
             <h4>TG ID: ${normative.telegram_id}</h4>
-            <button type="button" class="open-button" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            <button type="button" class="open-button" data-bs-toggle="modal" data-bs-target="#staticBackdrop${normative.id}">
               Открыть
             </button>
 
-            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal fade" id="staticBackdrop${normative.id}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-header" style="background-color: #1b1b1a">
@@ -375,7 +335,7 @@
                   </div>
                   <div class="modal-footer" style="background-color: #1b1b1a">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-                    <button type="button" class="edit-button" onclick="showUpdateUserForm(event, normative.id)">Редактировать</button>
+                    <button type="button" class="edit-button" onclick="showUpdateUserForm(${normative.telegram_id})">Редактировать</button>
                   </div>
                 </div>
               </div>
@@ -383,18 +343,6 @@
         `;
             gridBody.appendChild(card);
         });
-    }
-
-    function openViewCard(normative) {
-        const modal = document.getElementById('normativeModal');
-        const modalBody = document.getElementById('modalBody');
-
-        modalBody.innerHTML = `
-
-        <h2>${normative.username}</h2>
-
-    `;
-        modal.style.display = 'flex';
     }
 
     function filterNormative() {
@@ -493,9 +441,8 @@
         }
     }
 
-    function showUpdateUserForm(e, normativeid) {
-        e.preventDefault();
-        window.location.href = `/api/admins/normative/${normativeid}`
+    function showUpdateUserForm(normativeId) {
+        window.location.href = `/api/admin/normative/${normativeId}`
     }
 
     async function deleteUser(id, telegramId) {

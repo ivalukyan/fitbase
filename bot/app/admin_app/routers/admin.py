@@ -83,6 +83,7 @@ async def create_result(normative: NormativeSchemas):
 @router.get("/normative/{id}", description='Страница для обновления нормативов')
 async def update_normative(request: Request, id: int):
     normative = await get_standard_by_id(telegram_id=id)
+    print(normative)
     return templates.TemplateResponse('normative_add.html', {"request": request, 'normative': json.dumps(normative)})
 
 

@@ -2,9 +2,189 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Добавление норматива</title>
 </head>
-<body>
+<style>
+    :root {
+        --primary-color: #ffc266;
+        --hover-primary: #c59855;
+        --dark-bg: #121212;
+        --dark-gray: #181818;
+        --border-color: #282828;
+        --button-padding: 10px 20px;
+        --input-padding: 8px;
+    }
 
+    body {
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        background-color: var(--dark-bg);
+        color: #ffffff;
+        margin: 20px;
+    }
+
+    h1 {
+        color: var(--primary-color);
+        font-size: 24px;
+    }
+
+    a {
+        text-decoration: none;
+        color: var(--primary-color);
+    }
+
+    a:hover {
+        color: var(--hover-primary);
+    }
+
+    button {
+        padding: var(--button-padding);
+        margin: 0 2px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    #addNormativeForm {
+        background-color: var(--dark-gray);
+        padding: 20px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        margin: 0 0 25px 0;
+        animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .add {
+        background-color: var(--primary-color);
+        color: #000;
+        font-size: 16px;
+        font-weight: 600;
+        padding: var(--button-padding);
+        margin: 0 0 20px 0;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    input {
+        background-color: var(--dark-bg);
+        border: 1px solid var(--border-color);
+        color: #ffffff;
+        padding: var(--input-padding);
+        margin: 5px 0;
+        border-radius: 4px;
+        width: calc(100% - 16px);
+    }
+
+    input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+    }
+</style>
+<body>
+<h1><a href="/api/admin/home">Admin Панель</a> - Нормативы</h1>
+<div id="updateNormativeForm"></div>
+<script>
+    let normative = JSON.parse('{{ normative|safe }}');
+
+    const hideUpdateNormativeForm = () => {
+        window.location.replace('/api/admin/normative');
+    }
+
+    const updateNormative = async () => {
+        const username = normative.username;
+        const telegramid = normative.telegramid;
+        const grom = document.getElementById('addGrom').value.trim();
+        const turkish_barbell_lifting = document.getElementById('addTurkishBarbellLifting').value.trim();
+        const jump_rope = document.getElementById('addSkippingRope').value.trim();
+        const bench_press = document.getElementById('addBenchPress').value.trim();
+        const rod_length = document.getElementById('addRodLength').value.trim();
+        const shuttle_run = document.getElementById('addShuttleRun').value.trim();
+        const glute_bridge = document.getElementById('addGluteBridge').value.trim();
+        const pull_ups = document.getElementById('addPullUps').value.trim();
+        const cubic_jumps = document.getElementById('addCubicJumps').value.trim();
+        const lifting_barbell_on_the_chest_kilo = document.getElementById('addLiftingBarbellOnTheChestKilo').value.trim();
+        const axel_deadlift = document.getElementById('addAxelDeadlift').value.trim();
+        const handstand = document.getElementById('addHandstand').value.trim();
+        const classic_squat = document.getElementById('addClassicSquat').value.trim();
+        const turkish_kettlebell_lifting = document.getElementById('addTurkishKettlebellLifting').value.trim();
+        const push_ups = document.getElementById('addPushUps').value.trim();
+        const walking_kettlebells = document.getElementById('addWalkingKettlebells').value.trim();
+        const deadlift = document.getElementById('addDeadlift').value.trim();
+        const long_jump = document.getElementById('addLongJump').value.trim();
+        const barbell_jerk = document.getElementById('addBarbellJerk').value.trim();
+        const axel_hold = document.getElementById('addAxelHold').value.trim();
+        const front_squat = document.getElementById('addFrontSquat').value.trim();
+    }
+
+    const loadForm = (normative) => {
+        const div = document.getElementById('updateNormativeForm');
+        div.innerHTML = `
+    <h2>Добавление норматива</h2>
+    <label for="addGrom">Гром (мин:сек):</label>
+    <input type="text" id="addGrom" name="grom" placeholder="${normative.grom}">
+    <label for="addTurkishBarbellLifting">Турецкий подъем штанги (кг):</label>
+    <input type="number" id="addTurkishBarbellLifting" name="turkish_barbell_lifting"
+     placeholder="${normative.turkish_barbell_lifting}">
+    <label for="addSkippingRope">Скакалка (раз):</label>
+    <input type="number" id="addSkippingRope" name="skipping_rope" placeholder="${normative.jump_rope}">
+    <label for="addBenchPress">Жим лежа (кг):</label>
+    <input type="number" id="addBenchPress" name="bench_press" placeholder="${normative.bench_press}">
+    <label for="addRodLength">Протяжка штанги (кг):</label>
+    <input type="number" id="addRodLength" name="rod_length" placeholder="${normative.rod_length}">
+    <label for="addShuttleRun">Челночный бег (раз):</label>
+    <input type="number" id="addShuttleRun" name="shuttle_run" placeholder="${normative.shuttle_run}">
+    <label for="addGluteBridge">Ягодичный мостик (кг):</label>
+    <input type="number" id="addGluteBridge" name="glute_bridge" placeholder="${normative.glute_bridge}">
+    <label for="addPullUps">Подтягивания (раз):</label>
+    <input type="number" id="addPullUps" name="pull_ups" placeholder="${normative.pull_ups}">
+    <label for="addCubicJumps">Прыжки на куб (см):</label>
+    <input type="number" id="addCubicJumps" name="cubic_jumps" placeholder="${normative.cubic_jumps}">
+    <label for="addLiftingBarbellOnChestKilo">Взятие штанги на грудь (кг):</label>
+    <input type="number" id="addLiftingBarbellOnChestKilo" name="lifting_barbell_on_the_chest_kilo"
+    placeholder="${normative.lifting_barbell_on_the_chest_kilo}">
+    <label for="addAxelDeadlift">Становая тяга акселя (кг):</label>
+    <input type="number" id="addAxelDeadlift" name="axel_deadlift" placeholder="${normative.axel_deadlift}">
+    <label for="addHandstand">Стойка на руках (мин:сек):</label>
+    <input type="text" id="addHandstand" name="handstand" placeholder="${normative.handstand}">
+    <label for="addClassicSquat">Присед классический (кг):</label>
+    <input type="number" id="addClassicSquat" name="classic_squat" placeholder="${normative.classic_squat}">
+    <label for="addTurkishKettlebellLifting">Турецкий подъем гири (кг):</label>
+    <input type="number" id="addTurkishKettlebellLifting" name="turkish_kettlebell_lifting"
+     placeholder="${normative.turkish_kettlebell_lifting}">
+    <label for="addPushUps">Отжимания от пола (раз):</label>
+    <input type="number" id="addPushUps" name="push_ups" placeholder="${normative.push_ups}">
+    <label for="addWalkingKettlebells">Прогулка с гирями (метров):</label>
+    <input type="number" id="addWalkingKettlebells" name="walking_kettlebells" placeholder="${normative.walking_kettlebells}">
+    <label for="addDeadlift">Становая тяга штанги (кг):</label>
+    <input type="number" id="addDeadlift" name="deadlift" placeholder="${normative.deadlift}">
+    <label for="addLongJump">Прыжки в длину (см):</label>
+    <input type="number" id="addLongJump" name="long_jump" placeholder="${normative.long_jump}">
+    <label for="addBarbellJerk">Рывок штанги (кг):</label>
+    <input type="number" id="addBarbellJerk" name="barbell_jerk" placeholder="${normative.barbell_jerk}">
+    <label for="addAxelHold">Удержание акселя (мин:сек):</label>
+    <input type="text" id="addAxelHold" name="axel_hold" placeholder="${normative.axel_hold}">
+    <label for="addFrontSquat">Присед фронтальный (кг):</label>
+    <input type="number" id="addFrontSquat" name="front_squat" placeholder="${normative.front_squat}">
+    <button class="add" onclick="updateNormative()">Обновить</button>
+    <button onclick="hideUpdateNormativeForm()"
+            style="background-color: #282828; color: #ffffff; padding: 11px; font-weight: 700;"
+            >Отмена
+    </button>
+        `
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        loadForm(normative)
+    });
+</script>
 </body>
 </html>
