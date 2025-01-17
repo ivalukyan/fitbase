@@ -13,6 +13,7 @@ from database.utils import (get_all_users, add_user, update_user, delete_user, g
 from admin_app.schemas.user_schemas import UserSchemas
 from admin_app.schemas.normative_schemas import NormativeSchemas
 
+
 router = APIRouter(
     prefix="/admin",
     tags=["Админ"],
@@ -27,7 +28,7 @@ async def login_admin(request: Request, db: Session = Depends(get_db_session)):
 
 
 @router.get("/home", description="Главная страница")
-async def home(request: Request):
+async def home(request: Request, admin: AdminSchemas = Depends(get_current_admin)):
     users = await get_all_users()
     admins = await get_all_admins()
 
@@ -41,7 +42,7 @@ async def get_admin_me(admin: AdminSchemas = Depends(get_current_admin)):
 
 
 @router.get("/users", description="Получение всех пользователей")
-async def get_admin_users(request: Request):
+async def get_admin_users(request: Request, admin: AdminSchemas = Depends(get_current_admin)):
     
     users = await get_all_users()
     
@@ -49,33 +50,33 @@ async def get_admin_users(request: Request):
 
 
 @router.post("/users", description="Добавление пользователя", response_model=UserSchemas)
-async def create_admin_user(user: UserSchemas):
+async def create_admin_user(user: UserSchemas, admin: AdminSchemas = Depends(get_current_admin)):
     await add_user(username=user.username, phone=user.phone, email=user.email, telegram_id=user.telegram_id)
     user.msg = 'Добавление пользователя'
     return user
 
 
 @router.put("/users/{id}", description='Обновление данных пользователя', response_model=UserSchemas)
-async def update_admin_user(id: int, user: UserSchemas):
+async def update_admin_user(id: int, user: UserSchemas, admin: AdminSchemas = Depends(get_current_admin)):
     await update_user(username=user.username, phone=user.phone, email=user.email, telegram_id=user.telegram_id)
     user.msg = 'Обновление пользователя'
     return user
 
 
 @router.delete("/users/{id}", description='Удаление данных пользователя')
-async def delete_admin_user(id: int):
+async def delete_admin_user(id: int, admin: AdminSchemas = Depends(get_current_admin)):
     await delete_user(telegram_id=id)
     return {'msg': 'Удаление данных пользователя'}
 
 
 @router.get("/normative", description="Получение результатов пользователей")
-async def all_results(request: Request):
+async def all_results(request: Request, admin: AdminSchemas = Depends(get_current_admin)):
     normative = await get_all_standards()
     return templates.TemplateResponse("normative.html", {"request": request, 'normative': json.dumps(normative)})
 
 
 @router.post("/normative", description="Добавление результат норматива пользователя", response_model=NormativeSchemas)
-async def create_result(normative: NormativeSchemas):
+async def create_result(normative: NormativeSchemas, admin: AdminSchemas = Depends(get_current_admin)):
     await add_standard(username=normative.username, telegram_id=normative.telegram_id, grom=normative.grom,
                        turkish_barbell_lifting=normative.turkish_barbell_lifting, jump_rope=normative.jump_rope,
                        bench_press=normative.bench_press, rod_length=normative.rod_length, shuttle_run=normative.shuttle_run,
@@ -90,13 +91,13 @@ async def create_result(normative: NormativeSchemas):
 
 
 @router.get("/normative/{id}", description='Страница для обновления нормативов')
-async def update_normative(request: Request, id: int):
+async def update_normative(request: Request, id: int, admin: AdminSchemas = Depends(get_current_admin)):
     normative = await get_standard_by_id(telegram_id=id)
     return templates.TemplateResponse('normative_add.html', {"request": request, 'normative': json.dumps(normative)})
 
 
 @router.put("/normative/{id}", description="Изменение норматива пользователя", response_model=NormativeSchemas)
-async def update_result(request: Request, id: int, normative: NormativeSchemas):
+async def update_result(request: Request, id: int, normative: NormativeSchemas, admin: AdminSchemas = Depends(get_current_admin)):
     await update_standard(telegram_id=normative.telegram_id, grom=normative.grom,
                           turkish_barbell_lifting=normative.turkish_barbell_lifting, jump_rope=normative.jump_rope,
                           bench_press=normative.bench_press, rod_length=normative.rod_length,
@@ -112,6 +113,6 @@ async def update_result(request: Request, id: int, normative: NormativeSchemas):
 
 
 @router.delete("/normative/{id}", description="Удаление результата норматива пользователя")
-async def delete_result(id: UUID):
+async def delete_result(id: int, admin: AdminSchemas = Depends(get_current_admin)):
     await delete_user(telegram_id=id)
     return {"msg": "Удаление результата норматива пользователя"}
