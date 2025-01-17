@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from src.app.auth.dependencies import get_db_session, authenticate_admin
 from src.app.schemas.auth_schemas import Token
-from src.app.auth.utils import create_access_token
+from src.utils.security import create_access_token
 
 router = APIRouter(
     tags=['Авторизация'],

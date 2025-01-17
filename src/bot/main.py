@@ -1,9 +1,7 @@
 import asyncio
 import logging
 import sys
-from dotenv import load_dotenv
 from os import getenv
-from menu import MESSAGES
 
 from aiogram import Bot, Dispatcher, Router
 from aiogram.client.default import DefaultBotProperties
@@ -11,14 +9,15 @@ from aiogram.enums import ParseMode
 from aiogram.filters import CommandStart
 from aiogram.types import (
     Message, InlineKeyboardMarkup, InlineKeyboardButton, )
+from dotenv import load_dotenv
 
-from admin import router as admin_router
-from login import router as login_router
-from menu import router as menu_router
-from normatives import router as normatives_router
-from top import router as top_router
-from help import router as help_router
-
+from menu import MESSAGES
+from src.bot.admin import router as admin_router
+from src.bot.help import router as help_router
+from src.bot.login import router as login_router
+from src.bot.menu import router as menu_router
+from src.bot.normatives import router as normatives_router
+from src.bot.top import router as top_router
 
 load_dotenv()
 

@@ -1,16 +1,15 @@
 from datetime import datetime, timezone
 
 from fastapi import Depends, HTTPException, Request
-from sqlalchemy.exc import SQLAlchemyError
-from starlette import status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
-
-from admin_app.auth.utils import SECRET_KEY, ALGORITHM
-from database.models import SessionMaker, Admin
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
-from admin_app.schemas.admin_schemas import AdminSchemas
+from starlette import status
 
+from src.app.schemas.admin_schemas import AdminSchemas
+from src.database.models import SessionMaker, Admin
+from src.utils.security import SECRET_KEY, ALGORITHM
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
 
@@ -41,7 +40,7 @@ async def authenticate_admin(db_session: Session, username: str, password: str):
     admin = await get_admin(db_session, username)
     if not admin:
         return None
-    
+
     if admin.password != password:
         return None
     return admin
@@ -73,7 +72,6 @@ async def get_current_admin(db_session: Session = Depends(get_db_session), token
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Пользователь не найден")
 
     return AdminSchemas.from_orm(admin).dict()
-
 
 
 async def verify_token(token: str = Depends(oauth2_scheme)):
