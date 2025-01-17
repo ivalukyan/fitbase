@@ -3,7 +3,7 @@ import json
 from fastapi import APIRouter, Request, Depends
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
-from utils import (get_all_users, add_user, update_user, delete_user, get_all_admins, get_all_standards,
+from src.utils.database import (get_all_users, add_user, update_user, delete_user, get_all_admins, get_all_standards,
                    update_standard, add_standard, delete_standard, get_standard_by_id)
 
 from src.app.auth.dependencies import get_current_admin, get_db_session

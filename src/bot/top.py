@@ -1,11 +1,9 @@
-import logging
-
 from aiogram import Router, F
 from aiogram.types import (
     CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton
 )
 
-from src.utils.bot import get_top_by_name
+from src.utils.database import get_top_by_name
 
 router = Router()
 

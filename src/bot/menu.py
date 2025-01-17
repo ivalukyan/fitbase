@@ -1,11 +1,7 @@
-import logging
-
 from aiogram import Router, F
 from aiogram.types import (
-    CallbackQuery, ReplyKeyboardMarkup, KeyboardButton,
-    InlineKeyboardMarkup, InlineKeyboardButton
+    CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton
 )
-from pyexpat.errors import messages
 
 router = Router()
 MESSAGES = []

@@ -33,23 +33,3 @@ async def get_user_by_telegram_id(telegram_id: int) -> bool:
     if not user:
         return False
     return True
-
-
-async def add_user(username: str, phone: str, telegram_id: int, email: str | None = None):
-    user = User(username=username, phone=phone, email=email, telegram_id=telegram_id)
-    db.add(user)
-    db.commit()
-
-
-# Standard
-async def add_standard(telegram_id: int, username: str):
-    standard = Standards(telegram_id=telegram_id, username=username)
-    db.add(standard)
-    db.commit()
-
-async def get_standard_by_id(telegram_id: int):
-    return db.query(Standards).filter(Standards.telegram_id == telegram_id).first()
-
-
-async def get_top_by_name(name: str):
-    return db.query(getattr(Standards, name)).all()
