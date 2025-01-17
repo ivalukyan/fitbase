@@ -1,4 +1,6 @@
-from fastapi import Depends, HTTPException
+from datetime import datetime, timezone
+
+from fastapi import Depends, HTTPException, Request
 from sqlalchemy.exc import SQLAlchemyError
 from starlette import status
 from fastapi.security import OAuth2PasswordBearer
@@ -7,10 +9,17 @@ from jose import JWTError, jwt
 from admin_app.auth.utils import SECRET_KEY, ALGORITHM
 from database.models import SessionMaker, Admin
 from sqlalchemy.orm import Session
-from admin_app.schemas.auth_schemas import AdminSchemas
+from admin_app.schemas.admin_schemas import AdminSchemas
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
+
+
+def get_token(request: Request):
+    token = request.cookies.get('users_access_token')
+    if not token:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Token not found')
+    return token
 
 
 def get_db_session():
@@ -38,26 +47,32 @@ async def authenticate_admin(db_session: Session, username: str, password: str):
     return admin
 
 
-async def get_current_admin(db_session: Session = Depends(get_db_session), token: str = Depends(oauth2_scheme)):
+async def get_current_admin(db_session: Session = Depends(get_db_session), token: str = Depends(get_token)):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
+        detail="Токен не валидный",
         headers={"WWW-Authenticate": "Bearer"},
     )
 
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        phone: str = payload.get("sub")
-
-        if phone is None:
-            raise credentials_exception
     except JWTError:
         raise credentials_exception
 
-    admin = await get_admin(db_session, phone)
+    expire = payload.get('exp')
+    expire_time = datetime.fromtimestamp(int(expire), tz=timezone.utc)
+    if (not expire) or (expire_time < datetime.now(timezone.utc)):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Токен истек')
 
-    return AdminSchemas(id=admin.id, username=admin.username, password=admin.password,
-                        phone=admin.phone, email=admin.email)
+    phone: str = payload.get("sub")
+    if phone is None:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Не найден номер пользователя')
+
+    admin = await get_admin(db_session, phone)
+    if not admin:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Пользователь не найден")
+
+    return AdminSchemas.from_orm(admin).dict()
 
 
 

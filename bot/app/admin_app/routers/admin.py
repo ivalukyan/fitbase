@@ -41,7 +41,7 @@ async def get_admin_me(admin: AdminSchemas = Depends(get_current_admin)):
 
 
 @router.get("/users", description="Получение всех пользователей")
-async def get_admin_users(request: Request, db: Session = Depends(get_db_session)):
+async def get_admin_users(request: Request):
     
     users = await get_all_users()
     

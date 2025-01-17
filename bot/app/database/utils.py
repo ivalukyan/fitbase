@@ -121,9 +121,3 @@ async def get_all_admins():
     for admin in admins:
         data.append(AdminSchemas.from_orm(admin).dict())
     return data
-
-
-if __name__ == "__main__":
-    asyncio.run(add_standard(telegram_id=3049583, username='luka'))
-    asyncio.run(add_standard(telegram_id=4594094, username='luk'))
-
