@@ -1,11 +1,11 @@
-FROM python:3.10-buster
+FROM python:3.10-alpine
 
 WORKDIR /bot
 
-COPY ../requirements.txt ./requirements.txt
+COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY ../bot .
+COPY /src /bot
 
-CMD ["python", "bot.py"]
+CMD ["python", "main.py", "run"]
