@@ -114,5 +114,5 @@ async def update_result(request: Request, id: int, normative: NormativeSchemas, 
 
 @router.delete("/normative/{id}", description="Удаление результата норматива пользователя")
 async def delete_result(id: int, admin: AdminSchemas = Depends(get_current_admin)):
-    await delete_user(telegram_id=id)
-    return {"msg": "Удаление результата норматива пользователя"}
+    await delete_standard(telegram_id=id)
+    return {"msg": "Нормативы удалены"}

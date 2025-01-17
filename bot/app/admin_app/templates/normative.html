@@ -13,6 +13,8 @@
         :root {
             --primary-color: #ffc266;
             --hover-primary: #c59855;
+            --delete-btn: #990000;
+            --hover-delete-btn: #660000;
             --dark-bg: #121212;
             --dark-gray: #181818;
             --border-color: #282828;
@@ -122,8 +124,8 @@
         }
 
         .notification.is-info {
-            background-color: #209cee;
-            border: 1px solid #1c7bc9;
+            background-color: #00db6a;
+            border: 1px solid #00a851;
         }
 
         .notification .delete {
@@ -185,6 +187,14 @@
 
         .edit-button:hover {
             background-color: var(--primary-color);
+        }
+
+        .delete-button {
+            border: 1px solid var(--delete-btn);
+        }
+
+        .delete-button:hover{
+            background-color: var(--hover-delete-btn);
         }
     </style>
 </head>
@@ -288,6 +298,27 @@
         hideNotification();
     }
 
+    async function deleteNormative(telegramId){
+        try{
+            const response = await fetch(`/api/admin/normative/${telegramId}`, {
+                method: 'DELETE',
+                headers: {'Content-Type': 'application/json'}
+            })
+
+            if (!response.ok){
+                showNotification(`Ошибка ${response.status}: ${response.statusText}`);
+            }
+
+            const data = await response.json()
+            showNotification(data.msg);
+            setTimeout(() => {
+                window.location.replace('/api/admin/normative')
+            }, 4000);
+        } catch (e) {
+            showNotification(`${e.message}`)
+        }
+    }
+
     function loadNormative(filteredNormative = normative) {
         const gridBody = document.getElementById('normativeGrid');
         gridBody.innerHTML = '';
@@ -336,6 +367,7 @@
                   <div class="modal-footer" style="background-color: #1b1b1a">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
                     <button type="button" class="edit-button" onclick="showUpdateUserForm(${normative.telegram_id})">Редактировать</button>
+                    <button type="button" class="delete-button" onclick="deleteNormative(${normative.telegram_id})">Удалить</button>
                   </div>
                 </div>
               </div>
