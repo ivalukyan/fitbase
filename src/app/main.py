@@ -5,8 +5,8 @@ import logging
 from fastapi import FastAPI, APIRouter, Request, HTTPException
 from starlette.templating import Jinja2Templates
 
-from admin_app.routers.admin import router as admin_router
-from admin_app.routers.auth import router as auth_router
+from routers.admin_router import router as admin_router
+from routers.auth_router import router as auth_router
 
 app = FastAPI(version='1.0.0')
 api_router = APIRouter(
