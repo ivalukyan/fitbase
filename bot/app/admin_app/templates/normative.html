@@ -380,27 +380,50 @@
 
         const username = document.getElementById('addUsername').value.trim();
         const telegramid = document.getElementById('addTelegramId').value.trim();
-        const grom = document.getElementById('addGrom').value.trim();
-        const turkish_barbell_lifting = document.getElementById('addTurkishBarbellLifting').value.trim();
-        const jump_rope = document.getElementById('addSkippingRope').value.trim();
-        const bench_press = document.getElementById('addBenchPress').value.trim();
-        const rod_length = document.getElementById('addRodLength').value.trim();
-        const shuttle_run = document.getElementById('addShuttleRun').value.trim();
-        const glute_bridge = document.getElementById('addGluteBridge').value.trim();
-        const pull_ups = document.getElementById('addPullUps').value.trim();
-        const cubic_jumps = document.getElementById('addCubicJumps').value.trim();
-        const lifting_barbell_on_the_chest_kilo = document.getElementById('addLiftingBarbellOnTheChestKilo').value.trim();
-        const axel_deadlift = document.getElementById('addAxelDeadlift').value.trim();
-        const handstand = document.getElementById('addHandstand').value.trim();
-        const classic_squat = document.getElementById('addClassicSquat').value.trim();
-        const turkish_kettlebell_lifting = document.getElementById('addTurkishKettlebellLifting').value.trim();
-        const push_ups = document.getElementById('addPushUps').value.trim();
-        const walking_kettlebells = document.getElementById('addWalkingKettlebells').value.trim();
-        const deadlift = document.getElementById('addDeadlift').value.trim();
-        const long_jump = document.getElementById('addLongJump').value.trim();
-        const barbell_jerk = document.getElementById('addBarbellJerk').value.trim();
-        const axel_hold = document.getElementById('addAxelHold').value.trim();
-        const front_squat = document.getElementById('addFrontSquat').value.trim();
+        const gromElement = document.getElementById('addGrom');
+        const turkish_barbell_liftingElement = document.getElementById('addTurkishBarbellLifting');
+        const jump_ropeElement = document.getElementById('addSkippingRope');
+        const bench_pressElement = document.getElementById('addBenchPress');
+        const rod_lengthElement = document.getElementById('addRodLength');
+        const shuttle_runElement = document.getElementById('addShuttleRun');
+        const glute_bridgeElement = document.getElementById('addGluteBridge');
+        const pull_upsElement = document.getElementById('addPullUps');
+        const cubic_jumpsElement = document.getElementById('addCubicJumps');
+        const lifting_barbell_on_the_chest_kiloElement = document.getElementById('addLiftingBarbellOnTheChestKilo');
+        const axel_deadliftElement = document.getElementById('addAxelDeadlift');
+        const handstandElement = document.getElementById('addHandstand');
+        const classic_squatElement = document.getElementById('addClassicSquat');
+        const turkish_kettlebell_liftingElement = document.getElementById('addTurkishKettlebellLifting');
+        const push_upsElement = document.getElementById('addPushUps');
+        const walking_kettlebellsElement = document.getElementById('addWalkingKettlebells');
+        const deadliftElement = document.getElementById('addDeadlift');
+        const long_jumpElement = document.getElementById('addLongJump');
+        const barbell_jerkElement = document.getElementById('addBarbellJerk');
+        const axel_holdElement = document.getElementById('addAxelHold');
+        const front_squatElement = document.getElementById('addFrontSquat');
+
+
+        let grom = '';
+        let turkish_barbell_lifting = 0;
+        let jump_rope = 0;
+        let bench_press = 0;
+        let rod_length = 0;
+        let shuttle_run = 0;
+        let glute_bridge = 0;
+        let pull_ups = 0;
+        let cubic_jumps = 0;
+        let lifting_barbell_on_the_chest_kilo = 0;
+        let axel_deadlift = 0;
+        let handstand = '';
+        let classic_squat = 0;
+        let turkish_kettlebell_lifting = 0;
+        let push_ups = 0;
+        let walking_kettlebells = 0;
+        let deadlift = 0;
+        let long_jump = 0;
+        let barbell_jerk = 0;
+        let axel_hold = '';
+        let front_squat = 0;
 
 
         if (!telegramid || !username) {
@@ -408,12 +431,40 @@
             return;
         }
 
-        const newNormative = {id: users.length + 1, username, telegram_id, grom,
+        if (gromElement && turkish_barbell_liftingElement && jump_ropeElement && bench_pressElement &&
+        rod_lengthElement && shuttle_runElement && glute_bridgeElement && pull_upsElement && cubic_jumpsElement &&
+        lifting_barbell_on_the_chest_kiloElement && axel_deadliftElement && handstandElement && classic_squatElement &&
+        turkish_kettlebell_liftingElement && push_upsElement && walking_kettlebellsElement && deadliftElement &&
+        long_jumpElement && barbell_jerkElement && axel_holdElement && front_squatElement) {
+            grom = gromElement.value.trim();
+            turkish_barbell_lifting = turkish_barbell_liftingElement.value.trim();
+            jump_rope = jump_ropeElement.value.trim();
+            bench_press = bench_pressElement.value.trim();
+            rod_length = rod_lengthElement.value.trim();
+            shuttle_run = shuttle_runElement.value.trim();
+            glute_bridge = glute_bridgeElement.value.trim();
+            pull_ups = pull_upsElement.value.trim();
+            cubic_jumps = cubic_jumpsElement.value.trim();
+            lifting_barbell_on_the_chest_kilo = lifting_barbell_on_the_chest_kiloElement.value.trim();
+            axel_deadlift = axel_deadliftElement.value.trim();
+            handstand = handstandElement.value.trim();
+            classic_squat = classic_squatElement.value.trim();
+            turkish_kettlebell_lifting = turkish_kettlebell_liftingElement.value.trim();
+            push_ups = push_upsElement.value.trim();
+            walking_kettlebells = walking_kettlebellsElement.value.trim();
+            deadlift = deadliftElement.value.trim();
+            long_jump = long_jumpElement.value.trim();
+            barbell_jerk = barbell_jerkElement.value.trim();
+            axel_hold = axel_holdElement.value.trim();
+            front_squat = front_squatElement.value.trim();
+        }
+
+        const newNormative = {id: normative.length + 1, username, telegram_id: telegramid, grom,
         turkish_barbell_lifting, jump_rope, bench_press, rod_length, shuttle_run, glute_bridge,
         pull_ups, cubic_jumps, lifting_barbell_on_the_chest_kilo, axel_deadlift, handstand,
         classic_squat, turkish_kettlebell_lifting, push_ups, walking_kettlebells, deadlift,
         long_jump, barbell_jerk, axel_hold, front_squat};
-        if (users.some(user => user.telegram_id === telegramid)) {
+        if (normative.some(normative => normative.telegram_id === telegramid)) {
             showNotification('Пользователь с таким email или телефоном уже существует.');
             return;
         }
@@ -435,7 +486,7 @@
             showNotification(data.msg || 'Пользователь успешно добавлен.');
             normative.push(newNormative);
             loadNormative(normative);
-            hideAddUserForm();
+            hideAddNormativeForm();
         } catch (e) {
             showNotification(`Произошла ошибка: ${e.message}`);
         }

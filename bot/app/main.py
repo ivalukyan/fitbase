@@ -13,7 +13,7 @@ from admin_app.routers.auth import router as auth_router
 app = FastAPI(version='1.5.0')
 api_router = APIRouter(
     prefix="/api",
-    tags=["api"],
+    tags=["Api"],
 )
 
 templates = Jinja2Templates("admin_app/templates")

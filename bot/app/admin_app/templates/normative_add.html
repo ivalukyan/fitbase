@@ -88,41 +88,189 @@
         outline: none;
         border-color: var(--primary-color);
     }
+
+    #notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        width: 300px;
+        padding: 15px 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        font-size: 14px;
+        color: #ffffff;
+        z-index: 1000;
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .notification.is-info {
+        background-color: #209cee;
+        border: 1px solid #1c7bc9;
+    }
+
+    .notification .delete {
+        background: none;
+        border: none;
+        font-size: 16px;
+        cursor: pointer;
+        color: #ffffff;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+
+    #notification.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    #notification.hide {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
 </style>
 <body>
 <h1><a href="/api/admin/home">Admin Панель</a> - Нормативы</h1>
+<div id="notification" class="notification is-info" style="display: none;">
+    <button class="delete" onclick="closeModal()"></button>
+    <span id="saveMessage"></span>
+</div>
 <div id="updateNormativeForm"></div>
 <script>
     let normative = JSON.parse('{{ normative|safe }}');
+
+    const showNotification = (message) => {
+        const notification = document.getElementById('notification');
+        const saveMessage = document.getElementById('saveMessage');
+
+        saveMessage.textContent = message;
+        notification.classList.add('show');
+        notification.style.display = 'block';
+
+        setTimeout(() => {
+            hideNotification();
+        }, 3000);
+    }
+
+    const hideNotification = () => {
+        const notification = document.getElementById('notification');
+        notification.classList.add('hide');
+
+        setTimeout(() => {
+            notification.style.display = 'none';
+            notification.classList.remove('show', 'hide');
+        }, 300);
+    }
+
+    const closeModal = () => {
+        hideNotification();
+    }
 
     const hideUpdateNormativeForm = () => {
         window.location.replace('/api/admin/normative');
     }
 
     const updateNormative = async () => {
+        const normativeId = normative.id;
         const username = normative.username;
-        const telegramid = normative.telegramid;
-        const grom = document.getElementById('addGrom').value.trim();
-        const turkish_barbell_lifting = document.getElementById('addTurkishBarbellLifting').value.trim();
-        const jump_rope = document.getElementById('addSkippingRope').value.trim();
-        const bench_press = document.getElementById('addBenchPress').value.trim();
-        const rod_length = document.getElementById('addRodLength').value.trim();
-        const shuttle_run = document.getElementById('addShuttleRun').value.trim();
-        const glute_bridge = document.getElementById('addGluteBridge').value.trim();
-        const pull_ups = document.getElementById('addPullUps').value.trim();
-        const cubic_jumps = document.getElementById('addCubicJumps').value.trim();
-        const lifting_barbell_on_the_chest_kilo = document.getElementById('addLiftingBarbellOnTheChestKilo').value.trim();
-        const axel_deadlift = document.getElementById('addAxelDeadlift').value.trim();
-        const handstand = document.getElementById('addHandstand').value.trim();
-        const classic_squat = document.getElementById('addClassicSquat').value.trim();
-        const turkish_kettlebell_lifting = document.getElementById('addTurkishKettlebellLifting').value.trim();
-        const push_ups = document.getElementById('addPushUps').value.trim();
-        const walking_kettlebells = document.getElementById('addWalkingKettlebells').value.trim();
-        const deadlift = document.getElementById('addDeadlift').value.trim();
-        const long_jump = document.getElementById('addLongJump').value.trim();
-        const barbell_jerk = document.getElementById('addBarbellJerk').value.trim();
-        const axel_hold = document.getElementById('addAxelHold').value.trim();
-        const front_squat = document.getElementById('addFrontSquat').value.trim();
+        const telegramid = normative.telegram_id;
+        const gromElement = document.getElementById('addGrom');
+        const turkish_barbell_liftingElement = document.getElementById('addTurkishBarbellLifting');
+        const jump_ropeElement = document.getElementById('addSkippingRope');
+        const bench_pressElement = document.getElementById('addBenchPress');
+        const rod_lengthElement = document.getElementById('addRodLength');
+        const shuttle_runElement = document.getElementById('addShuttleRun');
+        const glute_bridgeElement = document.getElementById('addGluteBridge');
+        const pull_upsElement = document.getElementById('addPullUps');
+        const cubic_jumpsElement = document.getElementById('addCubicJumps');
+        const lifting_barbell_on_the_chest_kiloElement = document.getElementById('addLiftingBarbellOnTheChestKilo');
+        const axel_deadliftElement = document.getElementById('addAxelDeadlift');
+        const handstandElement = document.getElementById('addHandstand');
+        const classic_squatElement = document.getElementById('addClassicSquat');
+        const turkish_kettlebell_liftingElement = document.getElementById('addTurkishKettlebellLifting');
+        const push_upsElement = document.getElementById('addPushUps');
+        const walking_kettlebellsElement = document.getElementById('addWalkingKettlebells');
+        const deadliftElement = document.getElementById('addDeadlift');
+        const long_jumpElement = document.getElementById('addLongJump');
+        const barbell_jerkElement = document.getElementById('addBarbellJerk');
+        const axel_holdElement = document.getElementById('addAxelHold');
+        const front_squatElement = document.getElementById('addFrontSquat');
+
+
+        if (!telegramid || !username) {
+            showNotification('Пожалуйста, заполните все обязательные поля.');
+            return;
+        }
+
+        const grom = gromElement?.value.trim() || normative.grom;
+        const turkish_barbell_lifting = parseInt(turkish_barbell_liftingElement?.value.trim() || normative.turkish_barbell_lifting, 10);
+        const jump_rope = parseInt(jump_ropeElement?.value.trim() || normative.jump_rope, 10);
+        const bench_press = parseInt(bench_pressElement?.value.trim() || normative.bench_press, 10);
+        const rod_length = parseInt(rod_lengthElement?.value.trim() || normative.rod_length, 10);
+        const shuttle_run = parseInt(shuttle_runElement?.value.trim() || normative.shuttle_run, 10);
+        const glute_bridge = parseInt(glute_bridgeElement?.value.trim() || normative.glute_bridge, 10);
+        const pull_ups = parseInt(pull_upsElement?.value.trim() || normative.pull_ups, 10);
+        const cubic_jumps = parseInt(cubic_jumpsElement?.value.trim() || normative.cubic_jumps, 10);
+        const lifting_barbell_on_the_chest_kilo = parseInt(lifting_barbell_on_the_chest_kiloElement?.value.trim() || normative.lifting_barbell_on_the_chest_kilo, 10);
+        const axel_deadlift = parseInt(axel_deadliftElement?.value.trim() || normative.axel_deadlift, 10);
+        const handstand = handstandElement?.value.trim() || normative.handstand;
+        const classic_squat = parseInt(classic_squatElement?.value.trim() || normative.classic_squat, 10);
+        const turkish_kettlebell_lifting = parseInt(turkish_kettlebell_liftingElement?.value.trim() || normative.turkish_kettlebell_lifting, 10);
+        const push_ups = parseInt(push_upsElement?.value.trim() || normative.push_ups, 10);
+        const walking_kettlebells = parseInt(walking_kettlebellsElement?.value.trim() || normative.walking_kettlebells, 10);
+        const deadlift = parseInt(deadliftElement?.value.trim() || normative.deadlift, 10);
+        const long_jump = parseInt(long_jumpElement?.value.trim() || normative.long_jump, 10);
+        const barbell_jerk = parseInt(barbell_jerkElement?.value.trim() || normative.barbell_jerk, 10);
+        const axel_hold = axel_holdElement?.value.trim() || normative.axel_hold;
+        const front_squat = parseInt(front_squatElement?.value.trim() || normative.front_squat, 10);
+
+        const newNormative = {
+            id: normativeId,
+            username,
+            telegram_id: telegramid,
+            grom,
+            turkish_barbell_lifting,
+            jump_rope,
+            bench_press,
+            rod_length,
+            shuttle_run,
+            glute_bridge,
+            pull_ups,
+            cubic_jumps,
+            lifting_barbell_on_the_chest_kilo,
+            axel_deadlift,
+            handstand,
+            classic_squat,
+            turkish_kettlebell_lifting,
+            push_ups,
+            walking_kettlebells,
+            deadlift,
+            long_jump,
+            barbell_jerk,
+            axel_hold,
+            front_squat
+        };
+
+        try {
+            const response = await fetch(`/api/admin/normative/${telegramid}`, {
+                method: "PUT",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(newNormative)
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.msg || `Ошибка ${response.status}: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            showNotification(data.msg || 'Пользователь успешно добавлен.');
+            window.location.replace('/api/admin/normative');
+        } catch (e) {
+            showNotification(`Произошла ошибка: ${e.message}`);
+        }
     }
 
     const loadForm = (normative) => {

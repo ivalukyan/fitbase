@@ -27,6 +27,7 @@ class NormativeSchemas(BaseModel):
     barbell_jerk: int | None = None
     axel_hold: str | None = None
     front_squat: int | None = None
+    msg: str | None = None
 
     class Config:
         from_attributes = True

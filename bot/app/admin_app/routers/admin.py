@@ -15,7 +15,7 @@ from admin_app.schemas.normative_schemas import NormativeSchemas
 
 router = APIRouter(
     prefix="/admin",
-    tags=["Admin"],
+    tags=["Админ"],
 )
 
 templates = Jinja2Templates(directory="admin_app/templates")
@@ -76,20 +76,28 @@ async def all_results(request: Request):
 
 @router.post("/normative", description="Добавление результат норматива пользователя", response_model=NormativeSchemas)
 async def create_result(normative: NormativeSchemas):
-    await add_standard(username=normative.username, telegram_id=normative.telegram_id)
-    return {"msg": "Добавление результата норматива пользователя"}
+    await add_standard(username=normative.username, telegram_id=normative.telegram_id, grom=normative.grom,
+                       turkish_barbell_lifting=normative.turkish_barbell_lifting, jump_rope=normative.jump_rope,
+                       bench_press=normative.bench_press, rod_length=normative.rod_length, shuttle_run=normative.shuttle_run,
+                       glute_bridge=normative.glute_bridge, pull_ups=normative.pull_ups, cubic_jumps=normative.cubic_jumps,
+                       lifting_barbell_on_the_chest_count=normative.lifting_barbell_on_the_chest_count, axel_deadlift=normative.axel_deadlift,
+                       handstand=normative.handstand, classic_squat=normative.classic_squat, turkish_kettlebell_lifting=normative.turkish_kettlebell_lifting,
+                       push_ups=normative.push_ups, lifting_barbell_on_the_chest_kilo=normative.lifting_barbell_on_the_chest_kilo,
+                       walking_kettlebells=normative.walking_kettlebells, deadlift=normative.deadlift, long_jump=normative.long_jump,
+                       barbell_jerk=normative.barbell_jerk, axel_hold=normative.axel_hold, front_squat=normative.front_squat)
+    normative.msg = f'Норматив для {normative.username} добавлен.'
+    return normative
 
 
 @router.get("/normative/{id}", description='Страница для обновления нормативов')
 async def update_normative(request: Request, id: int):
     normative = await get_standard_by_id(telegram_id=id)
-    print(normative)
     return templates.TemplateResponse('normative_add.html', {"request": request, 'normative': json.dumps(normative)})
 
 
 @router.put("/normative/{id}", description="Изменение норматива пользователя", response_model=NormativeSchemas)
-async def update_result(request: Request, id: UUID, normative: NormativeSchemas):
-    await update_standard(username=normative.username, telegram_id=normative.telegram_id, grom=normative.grom,
+async def update_result(request: Request, id: int, normative: NormativeSchemas):
+    await update_standard(telegram_id=normative.telegram_id, grom=normative.grom,
                           turkish_barbell_lifting=normative.turkish_barbell_lifting, jump_rope=normative.jump_rope,
                           bench_press=normative.bench_press, rod_length=normative.rod_length,
                           shuttle_run=normative.shuttle_run, glute_bridge=normative.glute_bridge, pull_ups=normative.pull_ups,
@@ -99,7 +107,8 @@ async def update_result(request: Request, id: UUID, normative: NormativeSchemas)
                           lifting_barbell_on_the_chest_kilo=normative.lifting_barbell_on_the_chest_kilo,
                           walking_kettlebells=normative.walking_kettlebells, deadlift=normative.deadlift, long_jump=normative.long_jump,
                           barbell_jerk=normative.barbell_jerk, axel_hold=normative.axel_hold, front_squat=normative.front_squat)
-    return {"msg": "Обновление результата норматива пользователя"} # Сдать template для обновления данных
+    normative.msg = f"Обновление результатов нормативов {normative.username}."
+    return normative
 
 
 @router.delete("/normative/{id}", description="Удаление результата норматива пользователя")
