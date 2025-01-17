@@ -5,7 +5,7 @@ from aiogram.types import (
     CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton
 )
 
-from utils import get_top_by_name
+from src.utils.bot import get_top_by_name
 
 router = Router()
 

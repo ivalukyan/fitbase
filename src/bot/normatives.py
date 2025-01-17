@@ -2,7 +2,7 @@ from aiogram import Router, F
 from aiogram.types import (
     CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton
 )
-from utils import get_standard_by_id
+from src.utils.bot import get_standard_by_id
 
 router = Router()
 

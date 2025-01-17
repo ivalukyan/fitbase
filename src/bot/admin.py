@@ -3,7 +3,7 @@ from aiogram.filters import Command
 from aiogram.types import (
     InlineKeyboardMarkup, InlineKeyboardButton, Message
 )
-from utils import get_admin_by_telegram_id
+from src.utils.bot import get_admin_by_telegram_id
 
 
 router = Router()
