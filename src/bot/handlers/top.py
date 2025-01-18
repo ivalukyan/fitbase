@@ -5,10 +5,10 @@ from aiogram.types import (
 
 from utils.database import get_top_by_name
 from utils.bot import translate_top
+from service.bot_service import sorting_count_up, sorting_count_down, convert_time_count, convert_to_time, row_to_list
 
 router = Router()
 
-# Список кнопок с текстом и уникальным callback_data, соответствующим полям модели
 buttons = [
     ("Гром", "top_normative:grom"),
     ("Турецкий подъем штанги", "top_normative:turkish_barbell_lifting"),
@@ -35,7 +35,7 @@ buttons = [
     ("Назад", "back_menu")
 ]
 
-# Разбиение кнопок на строки по 2 элемента
+
 keyboard_rows = [
     [InlineKeyboardButton(text=text, callback_data=callback_data) for text, callback_data in buttons[i:i + 2]]
     for i in range(0, len(buttons), 2)
@@ -56,12 +56,25 @@ async def handle_top_normative(call: CallbackQuery):
 
     action = call.data.split(":")[1]
     top = await get_top_by_name(action)
+    top = await row_to_list(top)
+
+    if action == "grom" or action == "handstand" or action == "axel_hold":
+        t = await convert_time_count(top)
+        if action == "grom":
+            arr = await sorting_count_up(t)
+            top = await convert_to_time(arr)
+        else:
+            arr = await sorting_count_down(t)
+            top = await convert_to_time(arr)
+    else:
+        top = await sorting_count_down(top)
+
 
     name = await translate_top(action)
 
     if len(top) > 9:
         text = f"""
-        <b>Результаты - Топ 10\t{name}</b>
+        <b>Результаты - Топ 10\t<i>{name}</i></b>
         ------------------------------
          1 \t| {top[0][1]} = {top[0][0]}
          2 \t| {top[1][1]} = {top[1][0]}

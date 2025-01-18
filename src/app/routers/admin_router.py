@@ -90,7 +90,7 @@ async def create_result(normative: NormativeSchemas, admin: AdminSchemas = Depen
 @router.get("/normative/{id}", description='Страница для обновления нормативов')
 async def update_normative(request: Request, id: int, admin: AdminSchemas = Depends(get_current_admin)):
     normative = await get_standard_by_id(telegram_id=id)
-    return templates.TemplateResponse('normative_add.html', {"request": request, 'normative': json.dumps(normative)})
+    return templates.TemplateResponse('normative_update.html', {"request": request, 'normative': json.dumps(normative)})
 
 
 @router.put("/normative/{id}", description="Изменение норматива пользователя", response_model=NormativeSchemas)

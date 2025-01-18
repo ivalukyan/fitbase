@@ -273,7 +273,7 @@
         setTimeout(() => {
             notification.style.display = 'none';
             notification.classList.remove('show', 'hide');
-        }, 300); // Должно совпадать с `transition` в CSS
+        }, 300); // Должно совпадать с transition в CSS
     }
 
     // Закрытие через кнопку
@@ -306,11 +306,11 @@
                 localStorage.setItem("token", data.access_token);
                 window.location.href = "/api/admin/home"; // Перенаправление пользователя
             } else {
-                alert("Ошибка авторизации. Попробуйте позже.");
+                showNotification("Ошибка авторизации. Попробуйте позже.");
             }
         } catch (e) {
             console.error("Ошибка при выполнении запроса: ", e);
-            alert("Произошла ошибка. Проверьте подключение к сети.");
+            showNotification("Произошла ошибка. Проверьте подключение к сети.");
         }
     };
 
@@ -321,7 +321,7 @@
         const password = passwordInput.value;
 
         if (!login || !password) {
-            alert("Пожалуйста, заполните все поля.");
+            showNotification("Пожалуйста, заполните все поля.");
             return;
         }
 
@@ -329,13 +329,13 @@
             if (checkEmail(login)) {
                 await fetchAuth(login, password);
             } else {
-                alert("E-mail введен некорректно!");
+                showNotification("E-mail введен некорректно!");
             }
         } else {
             if (checkPhone(login)) {
                 await fetchAuth(login.slice(-11), password);
             } else {
-                alert("Номер телефона введен некорректно! Номер должен выглядеть: +7XXXXXXXXXX");
+                showNotification("Номер телефона введен некорректно! Номер должен выглядеть: +7XXXXXXXXXX");
             }
         }
     };

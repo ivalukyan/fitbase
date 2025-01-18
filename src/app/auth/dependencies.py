@@ -11,7 +11,7 @@ from app.schemas.admin_schemas import AdminSchemas
 from database.models import SessionMaker, Admin
 from utils.security import SECRET_KEY, ALGORITHM
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/token")
 
 
 def get_token(request: Request):
@@ -46,7 +46,7 @@ async def authenticate_admin(db_session: Session, username: str, password: str):
     return admin
 
 
-async def get_current_admin(db_session: Session = Depends(get_db_session), token: str = Depends(get_token)):
+async def get_current_admin(db_session: Session = Depends(get_db_session), token: str = Depends(oauth2_scheme)):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Токен не валидный",

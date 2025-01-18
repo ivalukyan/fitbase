@@ -13,9 +13,11 @@ router = APIRouter(
 )
 
 
+
 @router.post("/token")
 async def login_for_access_token(response: Response, form_data: OAuth2PasswordRequestForm = Depends(),
                                  db_session: Session = Depends(get_db_session)) -> Token:
+
     admin = await authenticate_admin(db_session, form_data.username, form_data.password)
     if not admin:
         raise HTTPException(
@@ -24,11 +26,11 @@ async def login_for_access_token(response: Response, form_data: OAuth2PasswordRe
             headers={"WWW-Authenticate": "Bearer"},
         )
     access_token = await create_access_token(data={"sub": form_data.username})
-    response.set_cookie(key="users_access_token", value=access_token, httponly=True)
+    response.set_cookie(key="users_access_token", value=access_token, path="/", httponly=True, secure=True)
     return Token(access_token=access_token, token_type="bearer", expires_in=30)
 
 
 @router.post("/logout")
 async def logout(response: Response):
-    response.delete_cookie(key="users_access_token")
+    response.delete_cookie(key="users_access_token", path="/")
     return {'msg': 'Токен удален'}
