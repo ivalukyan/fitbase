@@ -1,17 +1,15 @@
-import bcrypt
-
 from datetime import datetime, timezone
 
-from fastapi import Depends, HTTPException, Request, FastAPI
-from fastapi.security import OAuth2PasswordBearer
+import bcrypt
+from app.schemas.admin_schemas import AdminSchemas
+from database.models import SessionMaker, Admin
+from fastapi import Depends, HTTPException, Request
 from jose import JWTError, jwt
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 from starlette import status
-
-from app.schemas.admin_schemas import AdminSchemas
-from database.models import SessionMaker, Admin
 from utils.security import SECRET_KEY, ALGORITHM
+
 
 # oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/token")
 
@@ -35,14 +33,14 @@ def check_password(stored_hash: str, password: str) -> bool:
 
 
 def get_db_session():
-    db = SessionMaker()
+    session = SessionMaker()
     try:
-        yield db
+        yield session
     except SQLAlchemyError as e:
-        db.rollback()
+        session.rollback()
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     finally:
-        db.close()
+        session.close()
 
 
 async def get_admin(db_session: Session, phone: str):

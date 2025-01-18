@@ -2,11 +2,14 @@ import os
 import sys
 import pytest
 import bcrypt
+from sqlalchemy.exc import SQLAlchemyError
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
 from app.auth.dependencies import get_token
 from app.auth.dependencies import hash_password
+from app.auth.dependencies import check_password
+from app.auth.dependencies import get_db_session
 
 from fastapi import HTTPException
 from starlette import status
@@ -65,3 +68,55 @@ class TestHashPassword:
         # Assert
         assert isinstance(hashed, str)
         assert bcrypt.checkpw(password.encode('utf-8'), hashed.encode('utf-8'))
+
+
+class TestCheckPassword:
+
+    # Verify correct password matches stored hash
+    def test_correct_password_matches_hash(self):
+        # Arrange
+        password = "123456"
+        salt = bcrypt.gensalt()
+        stored_hash = bcrypt.hashpw(password.encode('utf-8'), salt)
+        stored_hash = stored_hash.decode('utf-8')
+
+
+        # Act
+        result = check_password(stored_hash, password)
+
+        # Assert
+        assert result is True
+
+    # Handle empty password string
+    def test_empty_password_returns_false(self):
+        # Arrange
+        password = ""
+        salt = bcrypt.gensalt()
+        stored_hash = bcrypt.hashpw("somepass".encode('utf-8'), salt).decode('utf-8')
+
+        # Act
+        result = check_password(stored_hash, password)
+
+        # Assert
+        assert result is False
+
+
+class TestGetDbSession:
+
+    # Session is successfully created and yielded
+    def test_session_created_and_yielded(self, mocker):
+        # Arrange
+        mock_session = mocker.Mock()
+        mock_session_maker = mocker.patch('app.auth.dependencies.SessionMaker', return_value=mock_session)
+
+        # Act
+        session_generator = get_db_session()
+        session = next(session_generator)
+
+        # Assert
+        mock_session_maker.assert_called_once()
+        assert session == mock_session
+        try:
+            next(session_generator)
+        except StopIteration:
+            mock_session.close.assert_called_once()
