@@ -1,6 +1,8 @@
+import bcrypt
+
 from datetime import datetime, timezone
 
-from fastapi import Depends, HTTPException, Request
+from fastapi import Depends, HTTPException, Request, FastAPI
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from sqlalchemy.exc import SQLAlchemyError
@@ -19,6 +21,17 @@ def get_token(request: Request):
     if not token:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Token not found')
     return token
+
+
+def hash_password(password: str) -> str:
+    salt = bcrypt.gensalt()
+
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
+    return hashed_password.decode('utf-8')
+
+
+def check_password(stored_hash: str, password: str) -> bool:
+    return bcrypt.checkpw(password.encode('utf-8'), stored_hash.encode('utf-8'))
 
 
 def get_db_session():
@@ -41,7 +54,7 @@ async def authenticate_admin(db_session: Session, username: str, password: str):
     if not admin:
         return None
 
-    if admin.password != password:
+    if not check_password(admin.password, password):
         return None
     return admin
 
