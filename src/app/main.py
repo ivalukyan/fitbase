@@ -14,7 +14,7 @@ api_router = APIRouter(
     tags=["Api"],
 )
 
-templates = Jinja2Templates("app/templates")
+templates = Jinja2Templates("tests_app/templates")
 
 
 # Обработчик для ошибки 404
