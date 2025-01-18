@@ -1,11 +1,11 @@
 """
 Utils DB
 """
-from src.app.schemas.admin_schemas import AdminSchemas
-from src.app.schemas.normative_schemas import NormativeSchemas
-from src.app.schemas.user_schemas import UserSchemas
-from src.database.models import SessionMaker
-from src.database.models import User, Standards, Admin
+from app.schemas.admin_schemas import AdminSchemas
+from app.schemas.normative_schemas import NormativeSchemas
+from app.schemas.user_schemas import UserSchemas
+from database.models import SessionMaker
+from database.models import User, Standards, Admin
 
 db = SessionMaker()
 

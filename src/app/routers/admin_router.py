@@ -3,13 +3,13 @@ import json
 from fastapi import APIRouter, Request, Depends
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
-from src.utils.database import (get_all_users, add_user, update_user, delete_user, get_all_admins, get_all_standards,
+from utils.database import (get_all_users, add_user, update_user, delete_user, get_all_admins, get_all_standards,
                    update_standard, add_standard, delete_standard, get_standard_by_id)
 
-from src.app.auth.dependencies import get_current_admin, get_db_session
-from src.app.schemas.admin_schemas import AdminSchemas
-from src.app.schemas.normative_schemas import NormativeSchemas
-from src.app.schemas.user_schemas import UserSchemas
+from app.auth.dependencies import get_current_admin, get_db_session
+from app.schemas.admin_schemas import AdminSchemas
+from app.schemas.normative_schemas import NormativeSchemas
+from app.schemas.user_schemas import UserSchemas
 
 router = APIRouter(
     prefix="/admin",

@@ -9,5 +9,4 @@ class AdminSchemas(BaseModel):
     email: str | None = None
 
     class Config:
-        orm_mode = True
         from_attributes=True

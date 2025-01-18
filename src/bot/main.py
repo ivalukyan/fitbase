@@ -1,6 +1,10 @@
 import asyncio
 import logging
 import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from os import getenv
 
 from aiogram import Bot, Dispatcher, Router
@@ -11,13 +15,13 @@ from aiogram.types import (
     Message, InlineKeyboardMarkup, InlineKeyboardButton, )
 from dotenv import load_dotenv
 
-from menu import MESSAGES
-from src.bot.admin import router as admin_router
-from src.bot.help import router as help_router
-from src.bot.login import router as login_router
-from src.bot.menu import router as menu_router
-from src.bot.normatives import router as normatives_router
-from src.bot.top import router as top_router
+from bot.handlers.menu import MESSAGES
+from bot.handlers.admin import router as admin_router
+from bot.handlers.help import router as help_router
+from bot.handlers.login import router as login_router
+from bot.handlers.menu import router as menu_router
+from bot.handlers.normatives import router as normatives_router
+from bot.handlers.top import router as top_router
 
 load_dotenv()
 

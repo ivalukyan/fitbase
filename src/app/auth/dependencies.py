@@ -7,9 +7,9 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 from starlette import status
 
-from src.app.schemas.admin_schemas import AdminSchemas
-from src.database.models import SessionMaker, Admin
-from src.utils.security import SECRET_KEY, ALGORITHM
+from app.schemas.admin_schemas import AdminSchemas
+from database.models import SessionMaker, Admin
+from utils.security import SECRET_KEY, ALGORITHM
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
 

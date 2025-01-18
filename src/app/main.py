@@ -5,8 +5,8 @@ import logging
 from fastapi import FastAPI, APIRouter, Request, HTTPException
 from starlette.templating import Jinja2Templates
 
-from src.app.routers.admin_router import router as admin_router
-from src.app.routers.auth_router import router as auth_router
+from app.routers.admin_router import router as admin_router
+from app.routers.auth_router import router as auth_router
 
 app = FastAPI(version='1.0.0')
 api_router = APIRouter(
@@ -74,8 +74,3 @@ api_router.include_router(auth_router)
 api_router.include_router(admin_router)
 
 app.include_router(api_router)
-
-
-if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO, stream=sys.stdout)
-    uvicorn.run(app, host="0.0.0.0", port=8000)

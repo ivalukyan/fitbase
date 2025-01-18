@@ -6,10 +6,10 @@ from aiogram.types import (
     CallbackQuery, ReplyKeyboardMarkup, KeyboardButton, Message, ReplyKeyboardRemove
 )
 
-from menu import MESSAGES
-from menu import menu
-from src.utils.bot import get_all_contacts, get_user_by_telegram_id
-from src.utils.database import add_user, add_standard
+from bot.handlers.menu import MESSAGES
+from bot.handlers.menu import menu
+from utils.bot import get_all_contacts, get_user_by_telegram_id
+from utils.database import add_user, add_standard
 
 router = Router()
 
