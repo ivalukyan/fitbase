@@ -234,7 +234,7 @@
     <label for="addName">Имя:</label>
     <input type="text" id="addName" name="name">
     <label for="addPhone">Телефон:</label>
-    <input type="text" id="addPhone" name="phone">
+    <input type="text" id="addPhone" name="phone" placeholder="79XXXXXXXXX">
     <label for="addEmail">Email:</label>
     <input type="email" id="addEmail" name="email">
     <label for="addTgId">TG ID:</label>
@@ -310,6 +310,11 @@
         hideNotification();
     }
 
+    function validatePhone(phone) {
+        const pattern = /^79\d{9}$/;
+        return pattern.test(phone);
+    }
+
     function loadUsers(filteredUsers = users) {
         const tableBody = document.getElementById('userTable').querySelector('tbody');
         tableBody.innerHTML = '';
@@ -375,6 +380,11 @@
             return;
         }
 
+        if (!validatePhone(phone)) {
+            showNotification("Формат для добавления телефона должен быть 79XXXXXXXXX.");
+            return;
+        }
+
         try {
             const response = await fetch('/api/admin/users', {
                 method: 'POST',
@@ -427,6 +437,11 @@
 
         if (users.some(user => user.email === email || user.phone === phone || user.telegram_id === tgid)) {
             showNotification('Пользователь с таким email или телефоном уже существует.');
+            return;
+        }
+
+        if (!validatePhone(phone)) {
+            showNotification("Формат для добавления телефона должен быть 79XXXXXXXXX.");
             return;
         }
 

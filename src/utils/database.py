@@ -116,7 +116,7 @@ async def get_standard_by_id(telegram_id: int):
 
 
 async def get_top_by_name(name: str):
-    return db.query(getattr(Standards, name)).all()
+    return db.query(getattr(Standards, name), Standards.username).all()
 
 
 async def get_all_admins():

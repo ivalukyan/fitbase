@@ -4,6 +4,7 @@ from aiogram.types import (
 )
 
 from utils.database import get_top_by_name
+from utils.bot import translate_top
 
 router = Router()
 
@@ -56,19 +57,23 @@ async def handle_top_normative(call: CallbackQuery):
     action = call.data.split(":")[1]
     top = await get_top_by_name(action)
 
-    if len(top) > 8:
+    name = await translate_top(action)
+
+    if len(top) > 9:
         text = f"""
-        <b>Результаты - Топ 10</b>
-         - {top[0]}
-         - {top[1]}
-         - {top[2]}
-         - {top[3]}
-         - {top[4]}
-         - {top[5]}
-         - {top[6]}
-         - {top[7]}
-         - {top[8]}
-         - {top[9]}
+        <b>Результаты - Топ 10\t{name}</b>
+        ------------------------------
+         1 \t| {top[0][1]} = {top[0][0]}
+         2 \t| {top[1][1]} = {top[1][0]}
+         3 \t| {top[2][1]} = {top[2][0]}
+         4 \t| {top[3][1]} = {top[3][0]}
+         5 \t| {top[4][1]} = {top[4][0]}
+         6 \t| {top[5][1]} = {top[5][0]}
+         7 \t| {top[6][1]} = {top[6][0]}
+         8 \t| {top[7][1]} = {top[7][0]}
+         9 \t| {top[8][1]} = {top[8][0]}
+        10\t| {top[9][1]} = {top[9][0]}
+        -------------------------------
         """
     else:
         text = """
