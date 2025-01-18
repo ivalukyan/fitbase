@@ -10,6 +10,8 @@ from app.auth.dependencies import get_token
 from app.auth.dependencies import hash_password
 from app.auth.dependencies import check_password
 from app.auth.dependencies import get_db_session
+from app.auth.dependencies import get_admin
+from database.models import Admin
 
 from fastapi import HTTPException
 from starlette import status
@@ -120,3 +122,47 @@ class TestGetDbSession:
             next(session_generator)
         except StopIteration:
             mock_session.close.assert_called_once()
+
+
+class TestGetAdmin:
+
+    # Return admin object when phone number exists in database
+    @pytest.mark.asyncio
+    async def test_get_admin_returns_admin_when_phone_exists(self, mocker):
+        # Arrange
+        mock_db = mocker.Mock()
+        mock_query = mocker.Mock()
+        mock_filter = mocker.Mock()
+        mock_admin = Admin(phone="1234567890", username="Test Admin")
+
+        mock_db.query.return_value = mock_query
+        mock_query.filter.return_value = mock_filter
+        mock_filter.first.return_value = mock_admin
+
+        # Act
+        result = await get_admin(mock_db, "1234567890")
+
+        # Assert
+        assert result == mock_admin
+        mock_db.query.assert_called_once_with(Admin)
+        mock_query.filter.assert_called_once()
+
+    # Handle empty string phone number
+    @pytest.mark.asyncio
+    async def test_get_admin_with_empty_phone(self, mocker):
+        # Arrange
+        mock_db = mocker.Mock()
+        mock_query = mocker.Mock()
+        mock_filter = mocker.Mock()
+
+        mock_db.query.return_value = mock_query
+        mock_query.filter.return_value = mock_filter
+        mock_filter.first.return_value = None
+
+        # Act
+        result = await get_admin(mock_db, "")
+
+        # Assert
+        assert result is None
+        mock_db.query.assert_called_once_with(Admin)
+        mock_query.filter.assert_called_once()
