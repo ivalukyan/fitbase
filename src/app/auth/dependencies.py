@@ -11,7 +11,7 @@ from app.schemas.admin_schemas import AdminSchemas
 from database.models import SessionMaker, Admin
 from utils.security import SECRET_KEY, ALGORITHM
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/token")
+# oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/token")
 
 
 def get_token(request: Request):
@@ -46,7 +46,7 @@ async def authenticate_admin(db_session: Session, username: str, password: str):
     return admin
 
 
-async def get_current_admin(db_session: Session = Depends(get_db_session), token: str = Depends(oauth2_scheme)):
+async def get_current_admin(db_session: Session = Depends(get_db_session), token: str = Depends(get_token)):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Токен не валидный",
@@ -72,14 +72,3 @@ async def get_current_admin(db_session: Session = Depends(get_db_session), token
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Пользователь не найден")
 
     return AdminSchemas.from_orm(admin).dict()
-
-
-async def verify_token(token: str = Depends(oauth2_scheme)):
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        phone: str = payload.get("sub")
-        if not phone:
-            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Invalid token")
-        return phone
-    except JWTError:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Invalid token")
