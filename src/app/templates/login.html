@@ -9,174 +9,220 @@
 </head>
 <style>
     /* login.css */
-body {
-    font-family: 'Poppins', sans-serif;
-    background-color: #1b1b1a;
-    color: #fff;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-
-.login-container {
-    width: 100%;
-    max-width: 400px;
-    padding: 20px;
-    background-color: #282828;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-}
-
-.logo {
-    font-size: 2rem;
-    color: #ffc266;
-    text-align: center;
-    margin-bottom: 10px;
-}
-
-h2 {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.form-group {
-    margin: 15px 20px 20px 0;
-}
-
-label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: 600;
-}
-
-input {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    background-color: #404040;
-    color: #fff;
-    font-size: 1rem;
-}
-
-input:focus {
-    outline: none;
-    border: 1px solid #ffc266;
-}
-
-.btn-login {
-    width: 100%;
-    padding: 10px;
-    background-color: #ffc266;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    margin-bottom: 15px;
-}
-
-.btn-login:hover {
-    background-color: #d39f52;
-}
-
-.options {
-    text-align: center;
-    margin-bottom: 10px;
-}
-
-.options a {
-    color: #ffc266;
-    text-decoration: none;
-    font-weight: 600;
-}
-
-.options a:hover {
-    text-decoration: underline;
-}
-
-.divider {
-    text-align: center;
-    margin: 15px 0;
-    font-size: 0.9rem;
-    color: #a5a5a5;
-    position: relative;
-}
-
-.divider::before,
-.divider::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    width: 40%;
-    height: 1px;
-    background-color: #a5a5a5;
-}
-
-.divider::before {
-    left: 0;
-}
-
-.divider::after {
-    right: 0;
-}
-
-.btn-facebook,
-.btn-google {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    margin-bottom: 10px;
-}
-
-.btn-facebook {
-    background-color: #3b5998;
-    color: #fff;
-}
-
-.btn-facebook:hover {
-    background-color: #324a86;
-}
-
-.btn-google {
-    background-color: #db4437;
-    color: #fff;
-}
-
-.btn-google:hover {
-    background-color: #c3362a;
-}
-
-.signup {
-    text-align: center;
-    margin-top: 15px;
-}
-
-.signup a {
-    color: #ffc266;
-    text-decoration: none;
-    font-weight: 600;
-}
-
-.signup a:hover {
-    text-decoration: underline;
-}
-
-@media screen and (max-width: 700px) {
-    .login-container{
-        margin: 10px 15px 10px 15px;
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #1b1b1a;
+        color: #fff;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
     }
-}
+
+    .login-container {
+        width: 100%;
+        max-width: 400px;
+        padding: 20px;
+        background-color: #282828;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .logo {
+        font-size: 2rem;
+        color: #ffc266;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin: 15px 20px 20px 0;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 600;
+    }
+
+    input {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #404040;
+        color: #fff;
+        font-size: 1rem;
+    }
+
+    input:focus {
+        outline: none;
+        border: 1px solid #ffc266;
+    }
+
+    .btn-login {
+        width: 100%;
+        padding: 10px;
+        background-color: #ffc266;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        margin-bottom: 15px;
+    }
+
+    .btn-login:hover {
+        background-color: #d39f52;
+    }
+
+    .options {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .options a {
+        color: #ffc266;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .options a:hover {
+        text-decoration: underline;
+    }
+
+    .divider {
+        text-align: center;
+        margin: 15px 0;
+        font-size: 0.9rem;
+        color: #a5a5a5;
+        position: relative;
+    }
+
+    .divider::before,
+    .divider::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        width: 40%;
+        height: 1px;
+        background-color: #a5a5a5;
+    }
+
+    .divider::before {
+        left: 0;
+    }
+
+    .divider::after {
+        right: 0;
+    }
+
+    .btn-facebook,
+    .btn-google {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        margin-bottom: 10px;
+    }
+
+    .btn-facebook {
+        background-color: #3b5998;
+        color: #fff;
+    }
+
+    .btn-facebook:hover {
+        background-color: #324a86;
+    }
+
+    .btn-google {
+        background-color: #db4437;
+        color: #fff;
+    }
+
+    .btn-google:hover {
+        background-color: #c3362a;
+    }
+
+    .signup {
+        text-align: center;
+        margin-top: 15px;
+    }
+
+    .signup a {
+        color: #ffc266;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .signup a:hover {
+        text-decoration: underline;
+    }
+
+    @media screen and (max-width: 700px) {
+        .login-container {
+            margin: 10px 15px 10px 15px;
+        }
+    }
+
+    #notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        width: 300px;
+        padding: 15px 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        font-size: 14px;
+        color: #ffffff;
+        z-index: 1000;
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .notification.is-info {
+        background-color: #00db6a;
+        border: 1px solid #00a851;
+    }
+
+    .notification .delete {
+        background: none;
+        border: none;
+        font-size: 16px;
+        cursor: pointer;
+        color: #ffffff;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+
+    #notification.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    #notification.hide {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
 
 </style>
 <body>
+<div id="notification" class="notification is-info" style="display: none;">
+    <button class="delete" onclick="closeModal()"></button>
+    <span id="saveMessage"></span>
+</div>
 <div class="login-container">
     <form class="login-form" onsubmit="handleLogin(event)">
         <h1 class="logo">Антифитнес</h1>
@@ -203,6 +249,37 @@ input:focus {
 <script>
     const loginInput = document.getElementById('username');
     const passwordInput = document.getElementById('password');
+
+    function showNotification(message) {
+        const notification = document.getElementById('notification');
+        const saveMessage = document.getElementById('saveMessage');
+
+        saveMessage.textContent = message; // Установить текст сообщения
+        notification.classList.add('show');
+        notification.style.display = 'block';
+
+        // Автоматически скрыть через 3 секунды
+        setTimeout(() => {
+            hideNotification();
+        }, 3000);
+    }
+
+    // Скрыть всплывающее окно
+    function hideNotification() {
+        const notification = document.getElementById('notification');
+        notification.classList.add('hide');
+
+        // Удалить элемент после завершения анимации
+        setTimeout(() => {
+            notification.style.display = 'none';
+            notification.classList.remove('show', 'hide');
+        }, 300); // Должно совпадать с `transition` в CSS
+    }
+
+    // Закрытие через кнопку
+    function closeModal() {
+        hideNotification();
+    }
 
     const checkEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 

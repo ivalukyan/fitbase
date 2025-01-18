@@ -1,11 +1,11 @@
-FROM python:3.10-alpine
+FROM python:3.10
 
-WORKDIR /bot
+WORKDIR /src
 
-COPY ./src/bot/requirements.txt ./requirements.txt
+COPY ../../docker/bot/requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY ./src /bot
+COPY ../../src /src
 
-CMD ["python", "bot.py", "run"]
+CMD ["python", "bot/main.py", "run"]

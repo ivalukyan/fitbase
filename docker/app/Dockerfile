@@ -1,15 +1,15 @@
-FROM python:3.10-alpine
+FROM python:3.10
 
-WORKDIR /app
+WORKDIR /src
 
 
-COPY ./docker/app/requirements.txt ./requirements.txt
+COPY ../../docker/app/requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
 
-COPY ./src /app
+COPY ../../src .
 
 EXPOSE 8000
 
-CMD ["python", "main.py", "run"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

@@ -1,8 +1,9 @@
-from src.fitbase_api.api import FitbaseAPI
-from dotenv import load_dotenv
 from os import getenv
+
+from database.models import Admin, User
 from database.models import SessionMaker
-from database.models import Admin, User, Standards
+from dotenv import load_dotenv
+from fitbase_api.api import FitbaseAPI
 
 db = SessionMaker()
 

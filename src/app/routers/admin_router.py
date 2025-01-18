@@ -16,7 +16,7 @@ router = APIRouter(
     tags=["Админ"],
 )
 
-templates = Jinja2Templates(directory="admin_app/templates")
+templates = Jinja2Templates(directory="app/templates")
 
 
 @router.get("/login", description="Авторизация администратора")

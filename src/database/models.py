@@ -1,15 +1,14 @@
-import os
-from uuid import uuid4
+from os import getenv
 
 from dotenv import load_dotenv
-from sqlalchemy import (Column, String, UUID, ForeignKey, BigInteger, ARRAY, Integer, Time)
+from sqlalchemy import (Column, String, BigInteger, Integer)
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base
-from sqlalchemy.orm import sessionmaker, relationship
+from sqlalchemy.orm import sessionmaker
 
-#load_dotenv()
+load_dotenv()
 
-db_url = "postgresql://postgres:postgres@localhost:5432/fitbase"
+db_url = getenv("DATABASE_URL")
 
 engine = create_engine(db_url, pool_pre_ping=True, pool_recycle=300)
 
