@@ -142,3 +142,7 @@ VALUES ('username', '79XXXXXXXXX', 'example@gmail.com', 'ваш хеширова
 
 13. После этого можно заходить и запускать бота командой `/start`, администратор `/admin`.
 
+## Пример работы программы
+![2.png](./docs/img/2.png)
+
+![3.png](./docs/img/3.png)
