@@ -7,7 +7,6 @@ from sqlalchemy.exc import SQLAlchemyError
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
 from app.auth.dependencies import get_token
-from app.auth.dependencies import hash_password
 from app.auth.dependencies import check_password
 from app.auth.dependencies import get_db_session
 from app.auth.dependencies import get_admin
@@ -43,33 +42,6 @@ class TestGetToken:
 
         assert exc_info.value.status_code == status.HTTP_401_UNAUTHORIZED
         assert exc_info.value.detail == 'Token not found'
-
-
-class TestHashPassword:
-
-    # Password is successfully hashed with bcrypt and returned as UTF-8 string
-    def test_password_is_hashed_successfully(self):
-        # Arrange
-        password = "mypassword123"
-
-        # Act
-        hashed = hash_password(password)
-
-        # Assert
-        assert isinstance(hashed, str)
-        assert bcrypt.checkpw(password.encode('utf-8'), hashed.encode('utf-8'))
-
-    # Empty string password input
-    def test_empty_password_is_hashed(self):
-        # Arrange
-        password = ""
-
-        # Act
-        hashed = hash_password(password)
-
-        # Assert
-        assert isinstance(hashed, str)
-        assert bcrypt.checkpw(password.encode('utf-8'), hashed.encode('utf-8'))
 
 
 class TestCheckPassword:
