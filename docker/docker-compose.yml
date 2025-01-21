@@ -36,5 +36,15 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80" # Порт для внешнего доступа
+    volumes:
+      - ../nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - fastapi_app
+
 volumes:
   postgres_data:
