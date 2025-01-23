@@ -1,11 +1,16 @@
 """
 Utils DB
 """
+import os
+import sys
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from app.schemas.admin_schemas import AdminSchemas
 from app.schemas.normative_schemas import NormativeSchemas
 from app.schemas.user_schemas import UserSchemas
-from database.models import SessionMaker
-from database.models import User, Standards, Admin
+from src.database.models import SessionMaker
+from src.database.models import User, Standards, Admin
 
 db = SessionMaker()
 
