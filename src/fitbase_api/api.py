@@ -1,9 +1,13 @@
 """
 @Description: API для запросов к CRM Fitbase
 """
+from asyncio import sleep
 from typing import Any
 from os import getenv
+
+import pandas as pd
 from dotenv import load_dotenv
+
 
 import httpx
 import ujson
@@ -26,14 +30,19 @@ class FitbaseAPI:
         @Description: Получение информации о всех клиентах
         :return:
         """
-        url = "https://api.fitbase.io/api/v2/client"
-        async with httpx.AsyncClient() as c:
-            response = await c.get(url=url, headers=self.headers)
-        res = ujson.loads(response.text)
-
-        if not res:
-            return "Ошибка загрузки данных"
-        return res
+        data = []
+        for i in range(1, 164):
+            query = {
+                "page": i,
+                "page_size": 100,
+            }
+            url = f"https://api.fitbase.io/api/v2/client"
+            async with httpx.AsyncClient() as c:
+                response = await c.get(url=url, headers=self.headers, params=query)
+            res = ujson.loads(response.text)
+            if response.status_code == 200:
+                data += res["items"]
+        return data
 
     async def clients_by_id(self, client_id: int) -> str | Any:
         """
@@ -256,8 +265,13 @@ class FitbaseAPI:
         return res
 
 
-async def main() -> None:
+def extract_contact(list_contacts):
+    if not list_contacts:
+        return None
+    return list_contacts[0].get("contact", None)
 
+
+async def main() -> None:
     token = getenv("TOKEN")
     domain = getenv("DOMAIN")
 
@@ -268,10 +282,22 @@ async def main() -> None:
     #     if service['service']['available_service']['archive'] is False:
     #         print(service['service']['available_service'])
 
-    contacts = await api.contacts_all()
-    for client in contacts['items']:
-        if client['contact_type'] == 'phone':
-            print(client['contact'])
+    # contacts = await api.contacts_all()
+    # for client in contacts['items']:
+    #     if client['contact_type'] == 'phone':
+    #         if client['contact'] == '79216281689':
+    #             print(client['contact'])
+    # Оформление таблицы с рамкой
+
+    clients = await api.clients_all()
+
+    df = pd.DataFrame(clients)
+
+    df['contact'] = df['contacts'].apply(extract_contact)
+    result = df[['name', 'surname', 'birth_date', 'contact']]
+
+    print(result)
+
 
     # clients = await api.clients_all()
     # for client in clients['items']:
