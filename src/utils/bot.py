@@ -1,7 +1,7 @@
 from fnmatch import translate
 from os import getenv
 
-from database.models import Admin, User
+from database.models import Admin, User, Standards
 from database.models import SessionMaker
 from dotenv import load_dotenv
 from fitbase_api.api import FitbaseAPI
@@ -13,17 +13,19 @@ TOKEN = getenv('TOKEN')
 DOMAIN = getenv('DOMAIN')
 
 
-async def get_all_contacts() -> list:
-    api = FitbaseAPI(fitbase_token=TOKEN, domain=DOMAIN)
+async def update_user_by_telegram(phone: str, telegram_id: int):
+    db.query(User).filter(User.phone == phone).update({'telegram_id': telegram_id})
+    db.commit()
 
-    arr_contacts = []
 
-    contacts = await api.contacts_all()
-    for c in contacts['items']:
-        if c['contact_type'] == 'phone':
-            arr_contacts.append(c['contact'])
+async def add_standard_by_telegram(telegram_id: int, username: str):
+    standard = Standards(telegram_id=telegram_id, username=username)
+    db.add(standard)
+    db.commit()
 
-    return arr_contacts
+
+async def get_all_contacts():
+    return db.query(User.phone).all()
 
 
 # Admin

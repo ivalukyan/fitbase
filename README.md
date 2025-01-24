@@ -100,9 +100,9 @@ CREATE TABLE admins (
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username VARCHAR NOT NULL,
-    phone VARCHAR NOT NULL,
+    phone VARCHAR NOT NULL DEFAULT '',
     email VARCHAR,
-    telegram_id BIGINT NOT NULL
+    telegram_id BIGINT
 );
 
 CREATE TABLE standards (
