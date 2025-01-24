@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: http_api
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/fitbase
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    format-sql: true
+
+bot:
+  token: 6886399917:AAEUpZFamKJwUwZvCm9ze9z3aFCYCCnuMd0
+  username: rcbobot
+
+server:
+  port: 8081
