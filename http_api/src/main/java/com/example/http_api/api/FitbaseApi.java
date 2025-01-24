@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -14,14 +15,14 @@ import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+
 public class FitbaseApi {
 
     private final String token;
     private final String domain;
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
-    
+
     public FitbaseApi(String token, String domain){
         this.token = token;
         this.domain = domain;
