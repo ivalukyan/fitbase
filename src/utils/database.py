@@ -15,6 +15,12 @@ from src.database.models import User, Standards, Admin
 db = SessionMaker()
 
 
+async def add_user(username: str, phone: str, email: str | None = None, telegram_id: int | None = None):
+    user = User(username=username, phone=phone, email=email, telegram_id=telegram_id)
+    db.add(user)
+    db.commit()
+
+
 async def update_user(telegram_id: int, username: str, phone: str, email: str):
     db.query(User).filter(User.telegram_id == telegram_id).update({'username': username, 'phone': phone,
                                                                    'email': email, 'telegram_id': telegram_id})

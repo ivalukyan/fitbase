@@ -31,9 +31,9 @@ class User(Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True, autoincrement=True)
     username = Column(String, nullable=False)
-    phone = Column(String, nullable=False)
+    phone = Column(String, nullable=False, default="")
     email = Column(String, nullable=True)
-    telegram_id = Column(BigInteger, nullable=False)
+    telegram_id = Column(BigInteger, nullable=True)
 
 
 class Standards(Base):

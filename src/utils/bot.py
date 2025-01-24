@@ -1,8 +1,8 @@
 from fnmatch import translate
 from os import getenv
 
-from db.models import Admin, User
-from db.models import SessionMaker
+from database.models import Admin, User
+from database.models import SessionMaker
 from dotenv import load_dotenv
 from fitbase_api.api import FitbaseAPI
 
