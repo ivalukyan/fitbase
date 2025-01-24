@@ -31,7 +31,7 @@ class FitbaseAPI:
         :return:
         """
         data = []
-        for i in range(1, 164):
+        for i in range(1, 45):
             query = {
                 "page": i,
                 "page_size": 100,
