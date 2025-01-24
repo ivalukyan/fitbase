@@ -336,7 +336,7 @@
     function filterUsers() {
         const query = document.getElementById('searchBox').value.toLowerCase();
         const filteredUsers = users.filter(user =>
-            (user.username?.toLowerCase().includes(query) || user.phone?.toLowerCase().includes(query))
+            (user.username?.toLowerCase().includes(query) || user.phone?.toLowerCase().includes(query.slice(1)))
         );
         loadUsers(filteredUsers);
     }
