@@ -1,10 +1,14 @@
 import asyncio
 import logging
+import os
 import sys
 from os import getenv
 
 import pandas as pd
 from dotenv import load_dotenv
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from fitbase_api.api import FitbaseAPI
 from utils.database import get_all_users, add_user
 
