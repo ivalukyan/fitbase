@@ -8,7 +8,6 @@ from os import getenv
 import pandas as pd
 from dotenv import load_dotenv
 
-
 import httpx
 import ujson
 import asyncio
@@ -294,7 +293,7 @@ async def main() -> None:
     df = pd.DataFrame(clients)
 
     df['contact'] = df['contacts'].apply(extract_contact)
-    result = df[['name', 'surname', 'birth_date', 'contact']]
+    result = df[['name', 'surname', 'birth_date', 'card', 'contact']]
 
     print(result)
 
