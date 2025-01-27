@@ -13,6 +13,10 @@ TOKEN = getenv('TOKEN')
 DOMAIN = getenv('DOMAIN')
 
 
+async def get_all_telegram_ids():
+    return db.query(User.telegram_id).all()
+
+
 async def update_user_by_telegram(phone: str, telegram_id: int):
     db.query(User).filter(User.phone == phone).update({'telegram_id': telegram_id})
     db.commit()

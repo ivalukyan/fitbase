@@ -1,8 +1,10 @@
 import json
+from datetime import datetime
 
 from fastapi import APIRouter, Request, Depends
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
+from sqlalchemy.util import await_only
 from utils.database import (get_all_users, add_user, update_user, delete_user, get_all_admins, get_all_standards,
                    update_standard, add_standard, delete_standard, get_standard_by_id)
 
@@ -10,6 +12,10 @@ from app.auth.dependencies import get_current_admin, get_db_session
 from app.schemas.admin_schemas import AdminSchemas
 from app.schemas.normative_schemas import NormativeSchemas
 from app.schemas.user_schemas import UserSchemas
+
+from service.app_service import get_count_month_users
+
+from redis.main import redis
 
 router = APIRouter(
     prefix="/admin",
@@ -29,8 +35,15 @@ async def home(request: Request, admin: AdminSchemas = Depends(get_current_admin
     users = await get_all_users()
     admins = await get_all_admins()
 
-    return templates.TemplateResponse("home.html", {"request": request, "users": json.dumps(users),
-                                                    "admins": json.dumps(admins)})
+    mon = datetime.now().month
+    cnt = len(await redis.hgetall("users"))
+
+    stats_users = await get_count_month_users(mon, cnt)
+
+    return templates.TemplateResponse("home.html", {"request": request,
+                                                    "users": json.dumps(users),
+                                                    "admins": json.dumps(admins),
+                                                    "stats_users": json.dumps(stats_users),})
 
 
 @router.get("/me", response_model=AdminSchemas, description="Профиль администратора")
@@ -40,9 +53,9 @@ async def get_admin_me(admin: AdminSchemas = Depends(get_current_admin)):
 
 @router.get("/users", description="Получение всех пользователей")
 async def get_admin_users(request: Request, admin: AdminSchemas = Depends(get_current_admin)):
-    
+
     users = await get_all_users()
-    
+
     return templates.TemplateResponse("users.html", {"request": request, 'users': json.dumps(users)})
 
 

@@ -15,6 +15,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from fitbase_api.api import FitbaseAPI
 from utils.database import get_all_users, add_user
+from redis.main import redis
 
 
 load_dotenv()
@@ -27,7 +28,7 @@ if not token or not domain:
     raise ValueError("Environment variables TOKEN and DOMAIN must be set.")
 
 api = FitbaseAPI(fitbase_token=token, domain=domain)
-redis = Redis(host='redis', port=6379, db=0)
+
 
 
 def extract_contact(list_contacts):
