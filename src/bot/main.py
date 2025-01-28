@@ -46,7 +46,8 @@ async def command_start(message: Message) -> None:
 
     exp = datetime(year=datetime.now().year, month=datetime.now().month + 1, day=1)
     await redis.hset("users", message.from_user.id,
-                     f"user - {message.from_user.first_name}; username - {message.from_user.username}", expire=exp)
+                     f"user - {message.from_user.first_name}; username - {message.from_user.username}")
+    await redis.expireat("users", exp)
 
 
 async def main():

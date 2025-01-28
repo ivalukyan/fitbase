@@ -26,7 +26,7 @@ async def login_for_access_token(response: Response, form_data: OAuth2PasswordRe
             headers={"WWW-Authenticate": "Bearer"},
         )
     access_token = await create_access_token(data={"sub": form_data.username})
-    response.set_cookie(key="users_access_token", value=access_token, path="/", httponly=True, secure=True)
+    response.set_cookie(key="users_access_token", value=access_token, path="/", httponly=True)
     return Token(access_token=access_token, token_type="bearer", expires_in=60)
 
 

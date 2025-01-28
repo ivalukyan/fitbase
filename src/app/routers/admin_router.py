@@ -1,4 +1,5 @@
 import json
+import logging
 from datetime import datetime
 
 from fastapi import APIRouter, Request, Depends
@@ -9,11 +10,12 @@ from utils.database import (get_all_users, add_user, update_user, delete_user, g
                    update_standard, add_standard, delete_standard, get_standard_by_id)
 
 from app.auth.dependencies import get_current_admin, get_db_session
-from app.schemas.admin_schemas import AdminSchemas
+from app.schemas.admin_schemas import AdminSchemas, StatsUsersSchema
 from app.schemas.normative_schemas import NormativeSchemas
 from app.schemas.user_schemas import UserSchemas
 
 from service.app_service import get_count_month_users
+from utils.database import get_top_by_name
 
 from redis_db.main import redis
 
@@ -25,6 +27,30 @@ router = APIRouter(
 templates = Jinja2Templates(directory="app/templates")
 
 
+standards = {
+    "Турецкий подъем штанги": "turkish_barbell_lifting",
+    "Скакалка": "jump_rope",
+    "Жим лежа": "bench_press",
+    "Протяжка штанги": "rod_length",
+    "Челночный бег": "shuttle_run",
+    "Ягодичный мостик": "glute_bridge",
+    "Подтягивания": "pull_ups",
+    "Прыжки на куб": "cubic_jumps",
+    "Взятие штанги на грудь (раз)": "lifting_barbell_on_the_chest_count",
+    "Становая тяга акселя": "axel_deadlift",
+    "Присед классический": "classic_squat",
+    "Турецкий подъем гири": "turkish_kettlebell_lifting",
+    "Отжимания от пола": "push_ups",
+    "Взятие штанги на грудь (кг)": "lifting_barbell_on_the_chest_kilo",
+    "Прогулка с гирями": "walking_kettlebells",
+    "Становая тяга штанги": "deadlift",
+    "Прыжки в длину": "long_jump",
+    "Рывок штанги": "barbell_jerk",
+    "Присед фронтальный": "front_squat",
+}
+
+
+
 @router.get("/login", description="Авторизация администратора")
 async def login_admin(request: Request, db: Session = Depends(get_db_session)):
     return templates.TemplateResponse("login.html", {"request": request})
@@ -34,16 +60,34 @@ async def login_admin(request: Request, db: Session = Depends(get_db_session)):
 async def home(request: Request, admin: AdminSchemas = Depends(get_current_admin)):
     users = await get_all_users()
     admins = await get_all_admins()
+    stats_normative = []
+
+    for s in standards.values():
+        sums = 0
+        stats = await get_top_by_name(s)
+        for t in range(len(stats)):
+            sums += stats[t][0]
+        stats_normative.append(sums / len(users))
+
+    print(f"Статистика пользователей {stats_normative}")
 
     mon = datetime.now().month
-    cnt = len(await redis.hgetall("users"))
+    redis_users = await redis.hgetall("users")
+
+    cnt = len({key.decode(): value.decode() for key, value in redis_users.items()})
+
+    print(f"Количество пользователей {cnt}")
 
     stats_users = await get_count_month_users(mon, cnt)
+
+    tx = [int(value.decode()) for value in stats_users.values()]
+    print(f"Статистика: {tx}")
 
     return templates.TemplateResponse("home.html", {"request": request,
                                                     "users": json.dumps(users),
                                                     "admins": json.dumps(admins),
-                                                    "stats_users": json.dumps(stats_users),})
+                                                    "stats_users": tx,
+                                                    "stats_normative": stats_normative})
 
 
 @router.get("/me", response_model=AdminSchemas, description="Профиль администратора")

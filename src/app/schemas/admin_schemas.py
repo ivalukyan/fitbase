@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Dict
 
 
 class AdminSchemas(BaseModel):
@@ -10,3 +11,7 @@ class AdminSchemas(BaseModel):
 
     class Config:
         from_attributes=True
+        
+
+class StatsUsersSchema(BaseModel):
+    stats: list[int]
