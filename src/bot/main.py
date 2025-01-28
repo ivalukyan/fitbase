@@ -3,8 +3,6 @@ import logging
 import sys
 import os
 
-from sqlalchemy.util import await_only
-
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from os import getenv
@@ -26,7 +24,7 @@ from bot.handlers.menu import router as menu_router
 from bot.handlers.normatives import router as normatives_router
 from bot.handlers.top import router as top_router
 
-from redis.main import redis
+from redis_db.main import redis
 
 load_dotenv()
 

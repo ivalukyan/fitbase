@@ -1,4 +1,9 @@
-from redis.main import redis
+import os
+import sys
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from redis_db.main import redis
 
 
 async def get_count_month_users(mon: int, cnt: int) -> None:

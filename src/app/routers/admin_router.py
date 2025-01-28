@@ -15,7 +15,7 @@ from app.schemas.user_schemas import UserSchemas
 
 from service.app_service import get_count_month_users
 
-from redis.main import redis
+from redis_db.main import redis
 
 router = APIRouter(
     prefix="/admin",

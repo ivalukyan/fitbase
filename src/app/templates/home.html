@@ -234,7 +234,7 @@
         statsAdmins.textContent = admins.length.toString() || '0';
     }
 
-    const statsForUsers = [65, 59, 80, 81, 56, 55]
+    const statsForUsers = JSON.parse('{{ stats_users|safe }}')
     const statsForStandards = [65, 59, 80, 81, 56, 55]
 
     // Создание графика
