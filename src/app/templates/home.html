@@ -127,14 +127,15 @@
             }
 
             .graf {
-                position: relative;
-                flex-direction: column;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
             }
         }
 
     .graf {
-        display: flex;
         width: 100%;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
         margin-top: 30px;
         gap: 15px;
         align-items: center;
