@@ -29,7 +29,7 @@ async def admin_endpoint(message: Message):
         """
 
         await message.answer(text=text, parse_mode="html", reply_markup=InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="Сайт", url="http://194.87.76.10/api/admin/login")],
+            [InlineKeyboardButton(text="Сайт", url="http://87.249.53.163/api/admin/login")],
             [InlineKeyboardButton(text="Рассылка", callback_data="mailing")]
         ]))
 
