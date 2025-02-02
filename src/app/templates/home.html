@@ -129,22 +129,28 @@
             .graf {
                 flex-direction: column;
             }
+
+            canvas {
+                width: 100%;
+            }
         }
 
-        .graf {
-            display: flex;
-            width: 100%;
-            margin: 30px 0 0 0;
-            gap: 15px;
-            align-items: center;
-            justify-content: space-around;
-        }
+    .graf {
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+        margin-top: 30px;
+        gap: 15px;
+        align-items: center;
+        justify-content: center;
+    }
 
-        canvas {
-            width: 100%;
-            max-width: auto;
-            height: auto;
-        }
+    canvas {
+        flex: 1;
+        min-width: 300px;
+        max-width: 600px;
+        height: auto;
+    }
 
     </style>
 </head>
