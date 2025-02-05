@@ -35,7 +35,6 @@ async def process_contact(message: Message) -> None:
     user_phone = message.contact.phone_number[-11:]
 
     contacts = await get_all_contacts()
-    print(contacts)
 
     if user_phone in contacts:
         await message.answer("Авторизация успешна! Добро пожаловать.", reply_markup=ReplyKeyboardRemove())
