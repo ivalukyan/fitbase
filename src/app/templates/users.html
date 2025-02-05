@@ -369,7 +369,7 @@
         const email = document.getElementById('addEmail').value.trim();
         const teleId = document.getElementById('addTgId').value.trim();
 
-        if (!name || !phone || !teleId) {
+        if (!name || !phone) {
             showNotification('Пожалуйста, заполните все поля.');
             return;
         }
