@@ -29,8 +29,8 @@ async def add_standard_by_telegram(telegram_id: int, username: str):
 
 
 async def get_all_contacts():
-    return db.query(User.phone).all()
-
+    con =  db.query(User.phone).all()
+    return [phone[0] for phone in con]
 
 # Admin
 async def get_admin_by_telegram_id(telegram_id: int):
