@@ -80,13 +80,12 @@ async def home(request: Request, admin: AdminSchemas = Depends(get_current_admin
 
     stats_users = await get_count_month_users(mon, cnt)
 
-    tx = [int(value.decode()) for value in stats_users.values()]
-    print(f"Статистика: {tx}")
+    print(f"Статистика: {stats_users}")
 
     return templates.TemplateResponse("home.html", {"request": request,
                                                     "users": json.dumps(users),
                                                     "admins": json.dumps(admins),
-                                                    "stats_users": tx,
+                                                    "stats_users": stats_users,
                                                     "stats_normative": stats_normative})
 
 
