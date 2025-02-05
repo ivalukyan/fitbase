@@ -374,7 +374,7 @@
             return;
         }
 
-        const newUser = {id: users.length + 1, username: name, phone, email, telegram_id: teleId};
+        const newUser = {id: users.length + 1, username: name, phone, email, telegram_id: teleId || null};
         if (users.some(user => user.email === email || user.phone === phone || user.telegram_id === teleId)) {
             showNotification('Пользователь с таким email или телефоном уже существует.');
             return;
