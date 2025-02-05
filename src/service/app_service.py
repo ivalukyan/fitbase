@@ -12,7 +12,7 @@ async def get_count_month_users(mon: int, cnt: int) -> None:
     print(value)
     if int(value[key]) < cnt:
         value[key] = cnt
-        await redis.set("stats_users", value)
+        await redis.set("list_users", value)
 
-    print(await redis.get("stats_users"))
-    return await redis.get("stats_users")
+    print(await redis.get("list_users"))
+    return await redis.get("list_users")
