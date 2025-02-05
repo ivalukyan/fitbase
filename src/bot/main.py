@@ -1,4 +1,5 @@
 import asyncio
+import json
 import logging
 import sys
 import os
@@ -51,19 +52,7 @@ async def command_start(message: Message) -> None:
 
 
 async def main():
-    await redis.hset("stats_users", "one", 0)
-    await redis.hset("stats_users", "two", 0)
-    await redis.hset("stats_users", "three", 0)
-    await redis.hset("stats_users", "four", 0)
-    await redis.hset("stats_users", "five", 0)
-    await redis.hset("stats_users", "six", 0)
-    await redis.hset("stats_users", "seven", 0)
-    await redis.hset("stats_users", "eight", 0)
-    await redis.hset("stats_users", "nine", 0)
-    await redis.hset("stats_users", "ten", 0)
-    await redis.hset("stats_users", "eleven", 0)
-    await redis.hset("stats_users", "twelve", 0)
-
+    await redis.set("stats_users", json.dumps([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]))
     dp.include_routers(login_router, menu_router, normatives_router, top_router, admin.router, help_router, router)
     await dp.start_polling(bot_object)
 
