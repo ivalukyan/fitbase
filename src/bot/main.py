@@ -39,6 +39,12 @@ dp = Dispatcher()
 
 @router.message(CommandStart())
 async def command_start(message: Message) -> None:
+
+    if await redis.get("list_users") is None:
+        await redis.set("list_users", json.dumps([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]))
+
+    logging.info(await redis.get("stats_users"))
+
     await message.answer(f"Здравствуйте, {message.from_user.first_name}!",
                          reply_markup=InlineKeyboardMarkup(inline_keyboard=[[
                              InlineKeyboardButton(text="Войти", callback_data="login")
@@ -52,7 +58,6 @@ async def command_start(message: Message) -> None:
 
 
 async def main():
-    await redis.set("stats_users", json.dumps([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]))
     dp.include_routers(login_router, menu_router, normatives_router, top_router, admin.router, help_router, router)
     await dp.start_polling(bot_object)
 

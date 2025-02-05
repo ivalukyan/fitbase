@@ -8,10 +8,11 @@ from redis_db.main import redis
 
 async def get_count_month_users(mon: int, cnt: int) -> None:
     key = mon - 1
-    value = await redis.get("stats_users")
+    value = await redis.get("list_users")
+    print(value)
     if int(value[key]) < cnt:
         value[key] = cnt
-        await redis.hset("stats_users", value)
+        await redis.set("stats_users", value)
 
-    print(await redis.hgetall("stats_users"))
-    return await redis.hgetall("stats_users")
+    print(await redis.get("stats_users"))
+    return await redis.get("stats_users")
